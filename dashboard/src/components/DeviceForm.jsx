@@ -43,7 +43,7 @@ export default function DeviceForm({ agents, onAdd }) {
           <span className="drawer-glow-icon">➕</span>
           <span className="drawer-title-text">Register New Network Device</span>
         </div>
-        <button type="button" className="btn-secondary-glow" style={{ padding: '6px 16px', fontSize: '12px' }}>
+        <button type="button" className="btn-secondary-glow" style={{ padding: '8px 18px', fontSize: '14px' }}>
           {expanded ? 'Close Form −' : '+ Expand Form'}
         </button>
       </div>

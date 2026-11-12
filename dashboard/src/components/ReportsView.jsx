@@ -5,6 +5,7 @@ export default function ReportsView() {
   const [data, setData] = useState([]);
   const [hours, setHours] = useState(24);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -13,6 +14,14 @@ export default function ReportsView() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [hours]);
+
+  function handleExportClick() {
+    if (exporting) return;
+    setExporting(true);
+    setTimeout(() => {
+      setExporting(false);
+    }, 1800);
+  }
 
   return (
     <div className="sonexo-card-section">
@@ -41,13 +50,28 @@ export default function ReportsView() {
             </select>
           </div>
 
-          <a href={api.exportCsvUrl()} className="btn-glowing-orange" download>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Export CSV Dataset
+          <a
+            href={api.exportCsvUrl()}
+            className={`btn-glowing-orange ${exporting ? 'btn-exporting' : ''}`}
+            download
+            onClick={handleExportClick}
+            title="Download full telemetry CSV record dataset"
+          >
+            {exporting ? (
+              <span className="btn-loading-flex">
+                <span className="sonexo-spinner"></span>
+                <span>Exporting CSV...</span>
+              </span>
+            ) : (
+              <>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export CSV Dataset</span>
+              </>
+            )}
           </a>
         </div>
       </div>
@@ -74,7 +98,7 @@ export default function ReportsView() {
               {data.map((row) => (
                 <tr key={row.deviceId} className="table-row">
                   <td>
-                    <strong className="text-white" style={{ fontSize: '13px' }}>{row.name}</strong>
+                    <strong className="text-white" style={{ fontSize: '15px' }}>{row.name}</strong>
                   </td>
                   <td>
                     <code className="ip-badge">{row.host}</code>
@@ -86,7 +110,7 @@ export default function ReportsView() {
                     </span>
                   </td>
                   <td>
-                    <span className="mono-font text-dim" style={{ fontSize: '12px' }}>{row.sampleCount} samples</span>
+                    <span className="mono-font text-dim" style={{ fontSize: '14px' }}>{row.sampleCount} samples</span>
                   </td>
                   <td>
                     <div className="sonexo-progress-cell">

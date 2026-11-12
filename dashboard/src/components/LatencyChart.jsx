@@ -109,8 +109,8 @@ export default function LatencyChart({ device }) {
         backgroundColor: 'rgba(7, 10, 16, 0.92)',
         titleColor: '#f8fafc',
         bodyColor: '#ffae57',
-        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
-        bodyFont: { family: 'JetBrains Mono', size: 13, weight: '600' },
+        titleFont: { family: 'Plus Jakarta Sans', size: 14, weight: '700' },
+        bodyFont: { family: 'JetBrains Mono', size: 14.5, weight: '600' },
         borderColor: 'rgba(255, 120, 30, 0.4)',
         borderWidth: 1.5,
         padding: 12,
@@ -125,17 +125,17 @@ export default function LatencyChart({ device }) {
     scales: {
       x: {
         grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
-        ticks: { color: '#64748b', maxTicksLimit: 8, font: { family: 'Plus Jakarta Sans', size: 11 } },
+        ticks: { color: '#64748b', maxTicksLimit: 8, font: { family: 'Plus Jakarta Sans', size: 13 } },
       },
       y: {
         beginAtZero: true,
         grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
-        ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 11 } },
+        ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 13 } },
         title: {
           display: true,
           text: 'Latency (ms)',
           color: '#8492a6',
-          font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
+          font: { family: 'Plus Jakarta Sans', size: 13, weight: '600' },
         },
       },
     },

@@ -45,7 +45,7 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
                   key={a.id}
                   className={`table-row ${!a.acknowledged ? (isCrit ? 'row-alert-crit-glow' : 'row-alert-warn-glow') : ''}`}
                 >
-                  <td className="mono-font text-dim" style={{ fontSize: '12px' }}>
+                  <td className="mono-font text-dim" style={{ fontSize: '14px' }}>
                     {new Date(a.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </td>
                   <td>
@@ -55,7 +55,7 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
                     </span>
                   </td>
                   <td>
-                    <strong className="text-white" style={{ fontSize: '13px' }}>{a.deviceName}</strong>
+                    <strong className="text-white" style={{ fontSize: '15px' }}>{a.deviceName}</strong>
                   </td>
                   <td>
                     <span className="violation-msg-text">{a.message}</span>
@@ -74,7 +74,7 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
                         ✓ Acknowledge
                       </button>
                     ) : (
-                      <span className="text-muted" style={{ fontSize: '12px' }}>Resolved</span>
+                      <span className="text-muted" style={{ fontSize: '14px' }}>Resolved</span>
                     )}
                   </td>
                 </tr>
