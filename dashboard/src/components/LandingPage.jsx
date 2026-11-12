@@ -44,10 +44,7 @@ export default function LandingPage({ onOpenLogin, onQuickDemo }) {
 
         <div className="landing-hero-cta">
           <button className="btn-glowing-primary btn-hero-lg" onClick={onOpenLogin}>
-            Access Operations Console ⚡
-          </button>
-          <button className="btn-secondary-outline btn-hero-lg" onClick={() => onQuickDemo('admin')}>
-            Instant Admin Demo (Bypass)
+            Sign Up Now ➔
           </button>
         </div>
 
