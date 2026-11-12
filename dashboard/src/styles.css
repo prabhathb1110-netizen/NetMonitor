@@ -2278,3 +2278,55 @@ body::after {
   font-family: var(--font-mono);
   font-size: 12px;
 }
+
+
+/* ==========================================================================
+   AUTHENTICATION MODAL MODE SWITCHER & SIGNUP STYLING
+   ========================================================================== */
+.auth-tab-switch {
+  display: flex;
+  background: rgba(5, 8, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 22px;
+  gap: 4px;
+}
+
+.auth-switch-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-main);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-switch-btn:hover {
+  color: #fff;
+}
+
+.switch-active {
+  background: linear-gradient(135deg, rgba(255, 106, 0, 0.3), rgba(255, 140, 50, 0.15)) !important;
+  color: #ff9d42 !important;
+  border: 1px solid rgba(255, 120, 30, 0.45) !important;
+  box-shadow: 0 0 12px rgba(255, 106, 0, 0.25);
+}
+
+.auth-link-orange {
+  color: var(--primary-amber);
+  text-decoration: none;
+  font-weight: 700;
+  margin-left: 4px;
+  transition: color 0.2s;
+}
+
+.auth-link-orange:hover {
+  color: #fff;
+  text-decoration: underline;
+}

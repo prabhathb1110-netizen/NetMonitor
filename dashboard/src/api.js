@@ -14,6 +14,16 @@ export const api = {
     return res.json();
   },
 
+  register: async (userData) => {
+    const res = await fetch(`${BASE}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+    if (!res.ok) throw new Error('Registration failed');
+    return res.json();
+  },
+
   // Devices (FR1, FR3, FR4, FR5)
   getDevices: async () => {
     const res = await fetch(`${BASE}/api/devices`);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function LandingPage({ onOpenLogin, onQuickDemo }) {
+export default function LandingPage({ onOpenLogin, onOpenSignUp }) {
   return (
     <div className="landing-page-wrap">
       {/* Top Navbar */}
@@ -43,7 +43,7 @@ export default function LandingPage({ onOpenLogin, onQuickDemo }) {
         </p>
 
         <div className="landing-hero-cta">
-          <button className="btn-glowing-primary btn-hero-lg" onClick={onOpenLogin}>
+          <button className="btn-glowing-primary btn-hero-lg" onClick={onOpenSignUp}>
             Sign Up Now ➔
           </button>
         </div>

@@ -10,7 +10,7 @@ import ReportsView from './components/ReportsView.jsx';
 import OpManagerTopology from './components/OpManagerTopology.jsx';
 import OpManagerWidgets from './components/OpManagerWidgets.jsx';
 import LandingPage from './components/LandingPage.jsx';
-import LoginModal from './components/LoginModal.jsx';
+import AuthModal from './components/AuthModal.jsx';
 
 function upsert(list, item) {
   return list.some((x) => x.id === item.id)
@@ -29,7 +29,8 @@ export default function App() {
     }
   });
 
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
   const [tab, setTab] = useState('noc');
   const [devices, setDevices] = useState([]);
   const [agents, setAgents] = useState([]);
@@ -85,7 +86,7 @@ export default function App() {
     try {
       localStorage.setItem('netmonitor_session', JSON.stringify(userData));
     } catch {}
-    setIsLoginOpen(false);
+    setIsAuthOpen(false);
   }
 
   function handleLogout() {
@@ -95,11 +96,14 @@ export default function App() {
     } catch {}
   }
 
-  function handleQuickDemo(role = 'admin') {
-    const demoUser = role === 'admin'
-      ? { token: 'demo-token', username: 'Achintha (Admin)', role: 'ADMIN' }
-      : { token: 'demo-token', username: 'Guest (Viewer)', role: 'VIEWER' };
-    handleLoginSuccess(demoUser);
+  function openSignIn() {
+    setAuthMode('login');
+    setIsAuthOpen(true);
+  }
+
+  function openSignUp() {
+    setAuthMode('signup');
+    setIsAuthOpen(true);
   }
 
   async function addDevice(device) {
@@ -134,13 +138,14 @@ export default function App() {
     return (
       <>
         <LandingPage
-          onOpenLogin={() => setIsLoginOpen(true)}
-          onQuickDemo={handleQuickDemo}
+          onOpenLogin={openSignIn}
+          onOpenSignUp={openSignUp}
         />
-        <LoginModal
-          isOpen={isLoginOpen}
-          onClose={() => setIsLoginOpen(false)}
-          onLoginSuccess={handleLoginSuccess}
+        <AuthModal
+          isOpen={isAuthOpen}
+          initialMode={authMode}
+          onClose={() => setIsAuthOpen(false)}
+          onAuthSuccess={handleLoginSuccess}
         />
       </>
     );

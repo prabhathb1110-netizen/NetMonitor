@@ -174,7 +174,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Auth (FR10)
+  // Auth (FR10) - Login
   if (path === '/api/auth/login' && method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -183,10 +183,32 @@ const server = http.createServer((req, res) => {
       if (username === 'admin' && password === 'admin123') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ token: 'mock-admin-token', username: 'admin', role: 'ADMIN' }));
-      } else {
+      } else if (username === 'viewer' && password === 'viewer123') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ token: 'mock-viewer-token', username: 'viewer', role: 'VIEWER' }));
+      } else {
+        // Allow registered users to log in
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ token: 'mock-user-token', username: username || 'User', role: 'ADMIN' }));
       }
+    });
+    return;
+  }
+
+  // Auth (FR10) - Register / Sign Up
+  if (path === '/api/auth/register' && method === 'POST') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      const { fullName, username, email, role } = JSON.parse(body || '{}');
+      res.writeHead(201, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        token: 'token-' + Date.now(),
+        username: username || 'NewUser',
+        fullName: fullName || 'Network Operator',
+        role: role || 'ADMIN',
+        message: 'Registration successful'
+      }));
     });
     return;
   }
