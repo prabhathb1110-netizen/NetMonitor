@@ -293,56 +293,498 @@ body::after {
   font-weight: 600;
 }
 
-/* Hero Section */
+/* Hero & Overview Section (Upper Dashboard Area) */
 .app-hero-section {
-  text-align: center;
-  padding: 40px 20px 28px 20px;
-  max-width: 860px;
-  margin: 0 auto;
+  max-width: 1380px;
+  width: 95%;
+  margin: 0 auto 24px auto;
+  padding: 24px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.hero-top-badge {
+/* Top: Centered Welcome Prabhath Banner */
+.hero-welcome-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto 22px auto;
+}
+
+.welcome-session-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background: rgba(255, 106, 0, 0.1);
-  border: 1px solid rgba(255, 106, 0, 0.3);
-  padding: 5px 16px;
+  border: 1px solid rgba(255, 106, 0, 0.28);
+  padding: 4px 14px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
   color: var(--primary-amber);
-  margin-bottom: 20px;
-  box-shadow: 0 0 16px rgba(255, 106, 0, 0.15);
+  margin-bottom: 12px;
+  box-shadow: 0 0 16px rgba(255, 106, 0, 0.14);
 }
 
-.hero-main-heading {
-  font-size: 42px;
+.welcome-session-text {
+  text-transform: uppercase;
+}
+
+.welcome-hero-heading {
+  font-size: 48px;
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -1.2px;
-  color: #fff;
-  margin-bottom: 14px;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  text-align: center;
 }
 
-.hero-main-heading span {
-  background: linear-gradient(135deg, #ff7a18 0%, #ffae57 100%);
+.welcome-username-glow {
+  background: linear-gradient(135deg, #ff8c33 0%, #ffae57 45%, #ffffff 90%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-style: italic;
+  filter: drop-shadow(0 0 20px rgba(255, 120, 30, 0.55));
+  font-weight: 800;
+  font-style: normal;
+  display: inline-block;
 }
 
-.hero-lead-text {
-  font-size: 15px;
+.welcome-hero-subtext {
+  font-size: 14.5px;
   color: var(--text-muted);
   line-height: 1.5;
-  margin-bottom: 24px;
+  margin: 0 auto;
+  max-width: 700px;
+  text-align: center;
 }
 
-.hero-buttons-row {
+/* Panoramic System Health Deck - Spans Full Width, Zero Wasted Space */
+.hero-health-chart-panoramic {
+  width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.system-health-panoramic-card {
+  width: 100%;
+  background: linear-gradient(145deg, rgba(16, 21, 33, 0.92) 0%, rgba(9, 13, 21, 0.98) 100%);
+  border: 1px solid rgba(255, 106, 0, 0.25);
+  border-radius: 22px;
+  padding: 22px 28px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 106, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.system-health-panoramic-card:hover {
+  border-color: rgba(255, 120, 30, 0.42);
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.65), 0 0 36px rgba(255, 106, 0, 0.16);
+}
+
+.health-deck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+
+.deck-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.health-pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: beacon-blink 1.8s infinite;
+}
+
+.deck-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.deck-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.deck-header-right {
+  display: flex;
+  align-items: center;
   gap: 14px;
+}
+
+.deck-live-stream-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--neon-green);
+}
+
+.live-stream-beacon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+  animation: beacon-blink 1.8s infinite;
+}
+
+.health-pie-toggle-group {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.health-toggle-pill {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.health-toggle-pill.active {
+  background: linear-gradient(135deg, #ff7a18, #ff5500);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 106, 0, 0.45);
+}
+
+/* 3-Column Panoramic Operational Deck Grid */
+.health-deck-grid {
+  display: grid;
+  grid-template-columns: 310px 1.3fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.deck-column {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-col-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding-bottom: 8px;
+}
+
+.col-subtag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Col 1 Chart Styling */
+.deck-col-chart {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.health-chart-wrapper {
+  position: relative;
+  width: 145px;
+  height: 145px;
+  margin: 6px 0 12px 0;
+}
+
+.donut-center-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.donut-center-value {
+  font-size: 21px;
+  font-weight: 800;
+  color: #10b981;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+}
+
+.donut-center-label {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.6px;
+  margin-top: 3px;
+}
+
+.chart-quick-chips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.chart-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.chip-green {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--neon-green);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.chip-green .chip-dot { background: var(--neon-green); box-shadow: 0 0 6px var(--neon-green); }
+
+.chip-amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--neon-amber);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.chip-amber .chip-dot { background: var(--neon-amber); box-shadow: 0 0 6px var(--neon-amber); }
+
+.chip-red {
+  background: rgba(255, 51, 75, 0.12);
+  color: var(--neon-red);
+  border: 1px solid rgba(255, 51, 75, 0.25);
+}
+.chip-red .chip-dot { background: var(--neon-red); box-shadow: 0 0 6px var(--neon-red); }
+
+/* Col 2 SLA Progress Stack */
+.deck-col-sla {
+  justify-content: space-between;
+}
+
+.sla-progress-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sla-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sla-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+}
+
+.sla-item-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #ffffff;
+}
+
+.status-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.dot-green { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.dot-amber { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+.dot-red { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+
+.sla-item-val {
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.sla-track-bar {
+  width: 100%;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sla-fill-bar {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.bar-green { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+.bar-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+.bar-red { background: linear-gradient(90deg, #ef4444, #f87171); box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+
+.sla-item-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.sla-deck-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Col 3 Pulse Metrics */
+.deck-col-pulse {
+  justify-content: space-between;
+}
+
+.pulse-tiles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.pulse-stat-tile {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: all 0.2s ease;
+}
+
+.pulse-stat-tile:hover {
+  border-color: rgba(255, 106, 0, 0.3);
+  background: rgba(255, 106, 0, 0.03);
+}
+
+.pulse-tile-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pulse-tile-icon {
+  font-size: 12px;
+}
+
+.pulse-tile-title {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.pulse-tile-value {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.pulse-tile-sub {
+  font-size: 9.5px;
+  color: var(--text-dim);
+}
+
+.pulse-stream-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--text-muted);
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.pulse-beacon-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary-orange);
+  box-shadow: 0 0 6px var(--primary-orange);
+  animation: beacon-blink 1.8s infinite;
+}
+
+/* Responsive layout */
+@media (max-width: 1100px) {
+  .health-deck-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .welcome-hero-heading {
+    font-size: 34px;
+  }
+  .pulse-tiles-grid {
+    grid-template-columns: 1fr;
+  }
+  .deck-header-right {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
 }
 
 /* Master Glass Shell */

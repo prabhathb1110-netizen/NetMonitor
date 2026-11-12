@@ -11,6 +11,7 @@ import OpManagerTopology from './components/OpManagerTopology.jsx';
 import OpManagerWidgets from './components/OpManagerWidgets.jsx';
 import LandingPage from './components/LandingPage.jsx';
 import AuthModal from './components/AuthModal.jsx';
+import SystemHealthPie from './components/SystemHealthPie.jsx';
 
 function upsert(list, item) {
   return list.some((x) => x.id === item.id)
@@ -166,20 +167,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* System Health Indicators */}
-        <div className="header-status-ticker">
-          <div className="status-pill-capsule">
-            <span className="ticker-dot-beacon"></span>
-            <span className="ticker-label-lead">SYSTEM HEALTH:</span>
-            <span className="ticker-badge-item badge-green">{count('UP')} UP</span>
-            {count('DEGRADED') > 0 && (
-              <span className="ticker-badge-item badge-amber">{count('DEGRADED')} WARN</span>
-            )}
-            {count('DOWN') > 0 && (
-              <span className="ticker-badge-item badge-red">{count('DOWN')} CRITICAL</span>
-            )}
-          </div>
-        </div>
+        {/* System Health ticker removed from header bar as requested; positioned as interactive pie chart below */}
 
         {/* Header Action Elements */}
         <div className="header-right-actions">
@@ -208,31 +196,29 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Container Hero */}
+      {/* Main Container Hero / Upper Dashboard Section */}
       <section className="app-hero-section">
-        <div className="hero-top-badge">
-          <span className="ticker-dot-beacon"></span>
-          <span>Logged in as {currentUser.username} · {currentUser.role} Level Access</span>
+        {/* Welcome Prabhath Greeting (Centered) */}
+        <div className="hero-welcome-center">
+          <div className="welcome-session-badge">
+            <span className="ticker-dot-beacon"></span>
+            <span className="welcome-session-text">
+              {currentUser.role || 'ADMIN'} OPERATOR SESSION · TELEMETRY ACTIVE
+            </span>
+          </div>
+
+          <h1 className="welcome-hero-heading">
+            Welcome, <span className="welcome-username-glow">{currentUser.username || 'Prabhath'}</span>
+          </h1>
+
+          <p className="welcome-hero-subtext">
+            High-velocity telemetry monitoring with continuous ICMP ping, TCP port analysis, and SNMP MIB-II performance metrics across discrete segments.
+          </p>
         </div>
-        <h1 className="hero-main-heading">
-          High-Velocity Network Telemetry with <span>NetMonitor</span>
-        </h1>
-        <p className="hero-lead-text">
-          Continuous ICMP ping, TCP port analysis, and SNMP MIB-II performance metrics across discrete segments with zero delay.
-        </p>
-        <div className="hero-buttons-row">
-          <button
-            className="btn-glowing-primary"
-            onClick={() => setTab('noc')}
-          >
-            NOC Overview Console
-          </button>
-          <button
-            className="btn-secondary-outline"
-            onClick={() => setTab('topology')}
-          >
-            View Network Topology ➔
-          </button>
+
+        {/* System Health Panoramic Deck (Fills Full Width, Zero Empty Space) */}
+        <div className="hero-health-chart-panoramic">
+          <SystemHealthPie devices={devices} agents={agents} alerts={alerts} />
         </div>
       </section>
 
