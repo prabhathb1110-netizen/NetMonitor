@@ -2192,3 +2192,89 @@ body::after {
   font-size: 12px !important;
   border-radius: 14px !important;
 }
+
+
+/* ==========================================================================
+   SYSTEM SPECS SECTION STYLING (Landing Page)
+   ========================================================================== */
+.landing-specs-section {
+  max-width: 1280px;
+  margin: 60px auto 80px auto;
+  padding: 0 32px;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.spec-card {
+  background: rgba(12, 17, 28, 0.78);
+  border: 1px solid rgba(255, 120, 30, 0.2);
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.spec-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 120, 30, 0.45);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 106, 0, 0.15);
+}
+
+.spec-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 14px;
+}
+
+.spec-icon {
+  font-size: 22px;
+}
+
+.spec-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.spec-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spec-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 8px;
+  gap: 12px;
+}
+
+.spec-key {
+  color: #8492a6;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.spec-val {
+  color: #f1f5f9;
+  font-weight: 600;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}

@@ -157,7 +157,7 @@ export default function App() {
         <div className="header-brand-group">
           <div className="brand-logo-ring"></div>
           <div className="brand-title-text">
-            NetMonitor <span>Enterprise</span>
+            NetMonitor
           </div>
         </div>
 
