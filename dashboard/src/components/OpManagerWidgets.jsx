@@ -15,42 +15,48 @@ export default function OpManagerWidgets({ devices, alerts, onSelectDevice }) {
   const downDevices = devices.filter((d) => d.status === 'DOWN' || d.status === 'DEGRADED');
 
   return (
-    <div className="opm-widgets-grid">
+    <div className="sonexo-widgets-grid">
       {/* Widget 1: Top Devices by CPU / Load */}
-      <div className="opm-widget-card">
-        <div className="opm-widget-header">
-          <div className="opm-widget-title-group">
-            <span className="opm-widget-icon">⚡</span>
-            <h4>Top Devices by CPU Utilization</h4>
+      <div className="sonexo-widget-card">
+        <div className="widget-header-strip">
+          <div className="widget-title-flex">
+            <span className="widget-icon-box">⚡</span>
+            <div>
+              <h4 className="widget-title-text">Top Devices by CPU</h4>
+              <span className="widget-subtitle">SNMP MIB-II Utilization</span>
+            </div>
           </div>
-          <span className="opm-badge-category">SNMP MIB-II</span>
+          <span className="widget-tag-pill">Telemetry</span>
         </div>
-        <div className="opm-widget-body">
+
+        <div className="widget-items-list">
           {topCpu.length === 0 ? (
-            <div className="opm-widget-empty">No SNMP CPU telemetry recorded</div>
+            <div className="widget-empty-text">No SNMP CPU telemetry recorded</div>
           ) : (
             topCpu.map((d) => (
               <div
                 key={d.id}
-                className="opm-stat-row"
+                className="widget-item-row"
                 onClick={() => onSelectDevice(d.id)}
               >
-                <div className="opm-row-left">
-                  <span className="opm-dev-name">{d.name}</span>
-                  <span className="opm-dev-ip">{d.host}</span>
+                <div className="item-meta-group">
+                  <span className="item-primary-name">{d.name}</span>
+                  <code className="item-host-ip">{d.host}</code>
                 </div>
-                <div className="opm-row-right">
-                  <div className="opm-gauge-bar">
+
+                <div className="item-gauge-group">
+                  <div className="item-bar-track">
                     <div
-                      className="opm-gauge-fill"
+                      className="item-bar-fill"
                       style={{
                         width: `${d.cpuUsage}%`,
                         backgroundColor:
-                          d.cpuUsage > 80 ? '#ef4444' : d.cpuUsage > 60 ? '#f59e0b' : '#10b981',
+                          d.cpuUsage > 80 ? '#ff334b' : d.cpuUsage > 60 ? '#f59e0b' : '#ff7a18',
+                        boxShadow: d.cpuUsage > 80 ? '0 0 8px rgba(255, 51, 75, 0.6)' : '0 0 8px rgba(255, 122, 24, 0.4)'
                       }}
                     ></div>
                   </div>
-                  <span className="opm-metric-val">{Math.round(d.cpuUsage)}%</span>
+                  <span className="item-val-badge">{Math.round(d.cpuUsage)}%</span>
                 </div>
               </div>
             ))
@@ -58,40 +64,46 @@ export default function OpManagerWidgets({ devices, alerts, onSelectDevice }) {
         </div>
       </div>
 
-      {/* Widget 2: Highest Response Time (Latency Dial) */}
-      <div className="opm-widget-card">
-        <div className="opm-widget-header">
-          <div className="opm-widget-title-group">
-            <span className="opm-widget-icon">⏱️</span>
-            <h4>Highest Response Time (Latency)</h4>
+      {/* Widget 2: Highest Response Time (Latency) */}
+      <div className="sonexo-widget-card">
+        <div className="widget-header-strip">
+          <div className="widget-title-flex">
+            <span className="widget-icon-box">⏱️</span>
+            <div>
+              <h4 className="widget-title-text">Highest Response Time</h4>
+              <span className="widget-subtitle">ICMP Round-Trip Ping</span>
+            </div>
           </div>
-          <span className="opm-badge-category">ICMP Echo</span>
+          <span className="widget-tag-pill">Latency</span>
         </div>
-        <div className="opm-widget-body">
+
+        <div className="widget-items-list">
           {topLatency.length === 0 ? (
-            <div className="opm-widget-empty">No active latency measurements</div>
+            <div className="widget-empty-text">No active latency measurements</div>
           ) : (
             topLatency.map((d) => (
               <div
                 key={d.id}
-                className="opm-stat-row"
+                className="widget-item-row"
                 onClick={() => onSelectDevice(d.id)}
               >
-                <div className="opm-row-left">
-                  <span className="opm-dev-name">{d.name}</span>
-                  <span className="opm-dev-ip">{d.host}</span>
+                <div className="item-meta-group">
+                  <span className="item-primary-name">{d.name}</span>
+                  <code className="item-host-ip">{d.host}</code>
                 </div>
-                <div className="opm-row-right">
-                  <div className="opm-gauge-bar">
+
+                <div className="item-gauge-group">
+                  <div className="item-bar-track">
                     <div
-                      className="opm-gauge-fill"
+                      className="item-bar-fill"
                       style={{
-                        width: `${Math.min(100, (d.latencyMs / 60) * 100)}%`,
-                        backgroundColor: d.latencyMs > 30 ? '#f59e0b' : '#38bdf8',
+                        width: `${Math.min(100, (d.latencyMs / 50) * 100)}%`,
+                        backgroundColor: d.latencyMs > 30 ? '#f59e0b' : '#ff9d42',
+                        boxShadow: '0 0 8px rgba(255, 157, 66, 0.4)'
                       }}
                     ></div>
                   </div>
-                  <span className="opm-metric-val">{d.latencyMs} ms</span>
+                  <span className="item-val-badge val-orange">{d.latencyMs} ms</span>
                 </div>
               </div>
             ))
@@ -99,35 +111,46 @@ export default function OpManagerWidgets({ devices, alerts, onSelectDevice }) {
         </div>
       </div>
 
-      {/* Widget 3: Health & Alarm Severity Distribution */}
-      <div className="opm-widget-card">
-        <div className="opm-widget-header">
-          <div className="opm-widget-title-group">
-            <span className="opm-widget-icon">🚨</span>
-            <h4>Critical Alarm Hotlist</h4>
+      {/* Widget 3: Critical Alarm Hotlist */}
+      <div className="sonexo-widget-card">
+        <div className="widget-header-strip">
+          <div className="widget-title-flex">
+            <span className="widget-icon-box alert-box-glow">🚨</span>
+            <div>
+              <h4 className="widget-title-text">Critical Alarm Hotlist</h4>
+              <span className="widget-subtitle">Actionable Interface Faults</span>
+            </div>
           </div>
-          <span className="opm-badge-crit">{alerts.filter((a) => !a.acknowledged).length} Active</span>
+          <span className="widget-alert-pill">
+            {alerts.filter((a) => !a.acknowledged).length} Active
+          </span>
         </div>
-        <div className="opm-widget-body">
+
+        <div className="widget-items-list">
           {downDevices.length === 0 ? (
-            <div className="opm-widget-empty text-green">All interfaces & devices normal</div>
+            <div className="widget-empty-text text-green">All interfaces & devices normal</div>
           ) : (
             downDevices.map((d) => (
               <div
                 key={d.id}
-                className="opm-alarm-row"
+                className="widget-alarm-card"
                 onClick={() => onSelectDevice(d.id)}
               >
-                <span className={`opm-status-pill pill-${d.status.toLowerCase()}`}>
-                  {d.status}
-                </span>
-                <div className="opm-alarm-text">
-                  <strong>{d.name}</strong> ({d.host})
-                  <div className="opm-alarm-sub">
+                <div className="alarm-card-top">
+                  <span className={`pill-badge ${d.status === 'DOWN' ? 'pill-down' : 'pill-degraded'}`}>
+                    <span className="pill-dot"></span>
+                    {d.status}
+                  </span>
+                  <span className="alarm-device-id">{d.name}</span>
+                </div>
+
+                <div className="alarm-card-body">
+                  <span className="alarm-host-mono">{d.host}</span>
+                  <p className="alarm-reason-text">
                     {d.status === 'DOWN'
                       ? 'Unreachable / 100% Packet Drop'
                       : `Closed Port: ${d.closedPorts || 'Degraded Service'}`}
-                  </div>
+                  </p>
                 </div>
               </div>
             ))
@@ -137,4 +160,3 @@ export default function OpManagerWidgets({ devices, alerts, onSelectDevice }) {
     </div>
   );
 }
-
