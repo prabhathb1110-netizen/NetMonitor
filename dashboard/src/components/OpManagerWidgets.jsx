@@ -137,3 +137,4 @@ export default function OpManagerWidgets({ devices, alerts, onSelectDevice }) {
     </div>
   );
 }
+

@@ -24,8 +24,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [live, setLive] = useState(false);
   const [error, setError] = useState('');
-  const [user, setUser] = useState({ username: 'admin', role: 'ADMIN' });
-  const [lastRefreshed, setLastRefreshed] = useState(new Date().toLocaleTimeString());
+  const [user, setUser] = useState({ username: 'Achintha', role: 'ADMIN' });
 
   const loadAll = useCallback(() => {
     Promise.all([api.getDevices(), api.getAgents(), api.getAlerts()])
@@ -33,7 +32,6 @@ export default function App() {
         setDevices(deviceList);
         setAgents(agentList);
         setAlerts(alertList);
-        setLastRefreshed(new Date().toLocaleTimeString());
         setError('');
         if (!selectedId && deviceList.length > 0) {
           setSelectedId(deviceList[0].id);
@@ -98,156 +96,194 @@ export default function App() {
   const unackAlertsCount = alerts.filter((a) => !a.acknowledged).length;
 
   return (
-    <div className="netmonitor-layout opmanager-theme">
-      {/* OpManager Top App Bar */}
-      <header className="opm-navbar">
-        <div className="opm-nav-left">
-          <div className="opm-brand-badge">
-            <span className="opm-brand-logo">📊</span>
-            <div>
-              <div className="opm-brand-name">
-                NetMonitor <span>OpManager Edition</span>
-              </div>
-              <div className="opm-brand-sub">Enterprise IT Infrastructure Monitoring</div>
-            </div>
+    <div className="sonexo-layout">
+      {/* Sonexo-Style Top Navigation */}
+      <header className="sonexo-header">
+        <div className="sonexo-brand">
+          <div className="sonexo-logo-ring"></div>
+          <div className="sonexo-brand-name">
+            NetMonitor <span>Sonexo</span>
           </div>
         </div>
 
-        <div className="opm-nav-center">
-          <div className="opm-alarm-ticker">
-            <span className="ticker-label">INCIDENT ALARMS:</span>
-            <span className="ticker-badge ticker-crit">{count('DOWN')} Down</span>
-            <span className="ticker-badge ticker-warn">{count('DEGRADED')} Trouble</span>
-            <span className="ticker-badge ticker-good">{count('UP')} Clear</span>
+        {/* Center Incident Pills */}
+        <div className="sonexo-nav-center">
+          <div className="pill-ticker-wrap">
+            <span className="ticker-dot ticker-dot-orange"></span>
+            <span>SYSTEM HEALTH:</span>
+            <span className="ticker-badge-val ticker-badge-up">{count('UP')} UP</span>
+            {count('DEGRADED') > 0 && (
+              <span className="ticker-badge-val ticker-badge-warn">{count('DEGRADED')} WARN</span>
+            )}
+            {count('DOWN') > 0 && (
+              <span className="ticker-badge-val ticker-badge-down">{count('DOWN')} CRITICAL</span>
+            )}
           </div>
         </div>
 
-        <div className="opm-nav-right">
-          <div className="opm-refresh-badge">
-            <span className="refresh-icon">🔄</span>
-            <span>Live Polling (Every 5s) · {lastRefreshed}</span>
-          </div>
-          <div className="opm-live-indicator">
-            <span className={`opm-beacon ${live ? 'beacon-pulse' : 'beacon-offline'}`}></span>
-            <span>{live ? 'NOC LIVE' : 'DISCONNECTED'}</span>
-          </div>
-          <div className="opm-user-chip">
-            <div className="user-initial">{user.username[0].toUpperCase()}</div>
-            <span>{user.username} ({user.role})</span>
+        {/* Right Action Elements */}
+        <div className="sonexo-header-right">
+          <button
+            className="btn-glowing-orange"
+            onClick={() => setTab('discovery')}
+          >
+            <span>+ Scan Network</span>
+          </button>
+
+          <div className="sonexo-user-pill">
+            <div className="user-avatar-glow">{user.username[0]}</div>
+            <span>{user.username}</span>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
-      <main className="opm-main-content">
-        {error && <div className="error-banner">⚠️ {error}</div>}
-
-        {/* Tab Navigation (OpManager Style) */}
-        <div className="opm-tabs-shelf">
+      {/* Hero Showcase (Matching Sonexo's glowing headline & capsule button layout) */}
+      <section className="sonexo-hero-banner">
+        <div className="hero-pill-badge">
+          <span className="ticker-dot ticker-dot-orange"></span>
+          <span>Distributed Multi-Segment Polling · Real-time WebSocket</span>
+        </div>
+        <h1 className="hero-headline">
+          High-Velocity Network Telemetry with <span>NetMonitor</span>
+        </h1>
+        <p className="hero-subtext">
+          Continuous ICMP ping, TCP port analysis, and SNMP MIB-II performance metrics across discrete segments with zero delay.
+        </p>
+        <div className="hero-cta-group">
           <button
-            className={`opm-tab ${tab === 'noc' ? 'opm-tab-active' : ''}`}
+            className="btn-glowing-orange"
             onClick={() => setTab('noc')}
           >
-            <span className="tab-icon">🖥️</span>
-            <span>NOC Overview & Top-Talkers</span>
+            Launch NOC Console
           </button>
-
           <button
-            className={`opm-tab ${tab === 'topology' ? 'opm-tab-active' : ''}`}
+            className="btn-secondary-glow"
             onClick={() => setTab('topology')}
           >
-            <span className="tab-icon">🗺️</span>
-            <span>Business View (Topology)</span>
+            View Network Topology ➔
+          </button>
+        </div>
+      </section>
+
+      {/* Master Framed Application Dashboard */}
+      <main className="sonexo-main-shell">
+        {error && <div className="error-banner">⚠️ {error}</div>}
+
+        {/* Sonexo Segmented Navigation Bar */}
+        <div className="sonexo-tabs-bar">
+          <button
+            className={`sonexo-tab-btn ${tab === 'noc' ? 'sonexo-tab-active' : ''}`}
+            onClick={() => setTab('noc')}
+          >
+            <span>⚡ NOC Overview</span>
           </button>
 
           <button
-            className={`opm-tab ${tab === 'inventory' ? 'opm-tab-active' : ''}`}
+            className={`sonexo-tab-btn ${tab === 'topology' ? 'sonexo-tab-active' : ''}`}
+            onClick={() => setTab('topology')}
+          >
+            <span>🗺️ Business View (Topology)</span>
+          </button>
+
+          <button
+            className={`sonexo-tab-btn ${tab === 'inventory' ? 'sonexo-tab-active' : ''}`}
             onClick={() => setTab('inventory')}
           >
-            <span className="tab-icon">📋</span>
-            <span>Device Inventory ({devices.length})</span>
+            <span>🖥️ Device Inventory ({devices.length})</span>
           </button>
 
           <button
-            className={`opm-tab ${tab === 'discovery' ? 'opm-tab-active' : ''}`}
+            className={`sonexo-tab-btn ${tab === 'discovery' ? 'sonexo-tab-active' : ''}`}
             onClick={() => setTab('discovery')}
           >
-            <span className="tab-icon">🔍</span>
-            <span>Subnet Discovery</span>
+            <span>🔍 Subnet Ping Sweep</span>
           </button>
 
           <button
-            className={`opm-tab ${tab === 'alarms' ? 'opm-tab-active' : ''}`}
+            className={`sonexo-tab-btn ${tab === 'alarms' ? 'sonexo-tab-active' : ''}`}
             onClick={() => setTab('alarms')}
           >
-            <span className="tab-icon">🚨</span>
-            <span>Alarms & Traps</span>
-            {unackAlertsCount > 0 && <span className="tab-pill-alert">{unackAlertsCount}</span>}
+            <span>🚨 Incident Alarms</span>
+            {unackAlertsCount > 0 && <span className="tab-badge-glow">{unackAlertsCount}</span>}
           </button>
 
           <button
-            className={`opm-tab ${tab === 'sla' ? 'opm-tab-active' : ''}`}
+            className={`sonexo-tab-btn ${tab === 'sla' ? 'sonexo-tab-active' : ''}`}
             onClick={() => setTab('sla')}
           >
-            <span className="tab-icon">📈</span>
-            <span>SLA Performance & CSV</span>
+            <span>📈 SLA & Telemetry CSV</span>
           </button>
         </div>
 
-        {/* Tab 1: NOC Overview (OpManager Dashboards) */}
+        {/* Tab 1: NOC Dashboard */}
         {tab === 'noc' && (
-          <div className="opm-dashboard-view">
-            {/* OpManager Top Metric Dials */}
-            <div className="opm-metric-tiles">
-              <div className="opm-tile opm-tile-total">
-                <div className="tile-head">TOTAL MONITORED</div>
-                <div className="tile-value">{devices.length}</div>
-                <div className="tile-footer">Across {agents.length} Polling Segments</div>
-              </div>
-
-              <div className="opm-tile opm-tile-healthy">
-                <div className="tile-head">HEALTHY / AVAILABLE</div>
-                <div className="tile-value text-green">{count('UP')}</div>
-                <div className="tile-footer">100% In Service</div>
-              </div>
-
-              <div className="opm-tile opm-tile-warn">
-                <div className="tile-head">ATTENTION REQUIRED</div>
-                <div className="tile-value text-amber">{count('DEGRADED')}</div>
-                <div className="tile-footer">Closed Ports / Latency Spikes</div>
-              </div>
-
-              <div className="opm-tile opm-tile-down">
-                <div className="tile-head">DEVICES DOWN</div>
-                <div className="tile-value text-red">{count('DOWN')}</div>
-                <div className="tile-footer">Unreachable Node Alarm</div>
-              </div>
-
-              <div className="opm-tile opm-tile-agents">
-                <div className="tile-head">DISTRIBUTED COLLECTORS</div>
-                <div className="tile-value text-cyan">
-                  {agents.filter((a) => a.online).length} / {agents.length}
+          <div>
+            {/* KPI Stat Cards with Sonexo 3D Bevel & Neon Headers */}
+            <div className="sonexo-stat-grid">
+              <div className="sonexo-card">
+                <div className="stat-top-row">
+                  <span className="stat-label-title">TOTAL MONITORED</span>
+                  <span>🌐</span>
                 </div>
-                <div className="tile-footer">Active TLS Socket Agents</div>
+                <div className="stat-big-val val-orange">{devices.length}</div>
+                <div className="stat-footer-text">Across {agents.length} Polling Agents</div>
+              </div>
+
+              <div className="sonexo-card">
+                <div className="stat-top-row">
+                  <span className="stat-label-title">OPERATIONAL (UP)</span>
+                  <span>🟢</span>
+                </div>
+                <div className="stat-big-val val-green">{count('UP')}</div>
+                <div className="stat-footer-text">100% In SLA Window</div>
+              </div>
+
+              <div className="sonexo-card">
+                <div className="stat-top-row">
+                  <span className="stat-label-title">DEGRADED / DELAY</span>
+                  <span>🟡</span>
+                </div>
+                <div className="stat-big-val val-amber">{count('DEGRADED')}</div>
+                <div className="stat-footer-text">Port Closed or Latency Spike</div>
+              </div>
+
+              <div className="sonexo-card">
+                <div className="stat-top-row">
+                  <span className="stat-label-title">CRITICAL (DOWN)</span>
+                  <span>🔴</span>
+                </div>
+                <div className="stat-big-val val-red">{count('DOWN')}</div>
+                <div className="stat-footer-text">Immediate Intervention Required</div>
+              </div>
+
+              <div className="sonexo-card">
+                <div className="stat-top-row">
+                  <span className="stat-label-title">SEGMENT AGENTS</span>
+                  <span>⚡</span>
+                </div>
+                <div className="stat-big-val val-orange">
+                  {agents.filter((a) => a.online).length}/{agents.length}
+                </div>
+                <div className="stat-footer-text">TLS Heartbeat Connected</div>
               </div>
             </div>
 
-            {/* Modular OpManager Widgets (Top CPU, Response Time, Alarms) */}
+            {/* Modular OpManager Top-Talker Widgets */}
             <OpManagerWidgets
               devices={devices}
               alerts={alerts}
               onSelectDevice={setSelectedId}
             />
 
-            {/* Live Telemetry Dial & Drill-Down Snapshot */}
+            {/* Selected Device Telemetry Graph */}
             {selected && (
-              <section className="glass-panel opm-drilldown-panel">
+              <section className="sonexo-panel">
                 <div className="panel-header-row">
                   <div>
-                    <h3 className="panel-title">Device Telemetry Snapshot · {selected.name}</h3>
-                    <p className="muted">Live Response Time, Packet Loss & Interface Analytics</p>
+                    <h3 className="panel-title">Telemetry Snapshot · {selected.name}</h3>
+                    <p className="muted">Live RTT Response Time & Packet Loss Graph</p>
                   </div>
-                  <span className="badge-opm-tag">{selected.host}</span>
+                  <span className="sonexo-chip">{selected.host}</span>
                 </div>
                 <LatencyChart device={selected} />
               </section>
@@ -257,11 +293,11 @@ export default function App() {
 
         {/* Tab 2: Topology / Business View */}
         {tab === 'topology' && (
-          <section className="glass-panel">
+          <section className="sonexo-panel">
             <div className="panel-header-row">
               <div>
-                <h3 className="panel-title">Network Business View & Layer-2 Topology Map</h3>
-                <p className="muted">Visual network hierarchy with live traffic light status and link telemetry</p>
+                <h3 className="panel-title">Network Business View & Layer-2 Hierarchy</h3>
+                <p className="muted">Interconnected segments from Gateway Routers to Distribution & Endpoints</p>
               </div>
             </div>
             <OpManagerTopology
@@ -277,12 +313,12 @@ export default function App() {
 
         {/* Tab 3: Device Inventory */}
         {tab === 'inventory' && (
-          <div className="opm-inventory-view">
-            <section className="glass-panel">
+          <div className="sonexo-inventory">
+            <section className="sonexo-panel">
               <div className="panel-header-row">
                 <div>
-                  <h3 className="panel-title">Infrastructure Device Inventory</h3>
-                  <p className="muted">Full multi-vendor device roster with SNMP MIB attributes & port checks</p>
+                  <h3 className="panel-title">Multi-Vendor Device Roster</h3>
+                  <p className="muted">ICMP echo, TCP multi-port checks, and SNMP v2c/v3 profiles</p>
                 </div>
               </div>
 
@@ -300,11 +336,11 @@ export default function App() {
               )}
             </section>
 
-            <section className="glass-panel">
+            <section className="sonexo-panel">
               <div className="panel-header-row">
                 <div>
-                  <h3 className="panel-title">Distributed Polling Collectors (FR6)</h3>
-                  <p className="muted">Agent daemons collecting ICMP & SNMP across discrete subnets</p>
+                  <h3 className="panel-title">Distributed Monitoring Agents (FR6)</h3>
+                  <p className="muted">Outbound TLS socket links with 1-hour offline FIFO buffer</p>
                 </div>
               </div>
               <AgentList agents={agents} devices={devices} />
@@ -314,18 +350,18 @@ export default function App() {
 
         {/* Tab 4: Subnet Discovery */}
         {tab === 'discovery' && (
-          <section className="glass-panel">
+          <section className="sonexo-panel">
             <SubnetDiscovery agents={agents} onAddDevice={addDevice} />
           </section>
         )}
 
         {/* Tab 5: Alarms */}
         {tab === 'alarms' && (
-          <section className="glass-panel">
+          <section className="sonexo-panel">
             <div className="panel-header-row">
               <div>
-                <h3 className="panel-title">Alarm & Trap Console (Root Cause Hotlist)</h3>
-                <p className="muted">OpManager-grade fault management and operator acknowledgement workflow</p>
+                <h3 className="panel-title">Incident Alarm Feed & Threshold Breaches</h3>
+                <p className="muted">Event log with operator acknowledgement state</p>
               </div>
             </div>
             <AlertPanel alerts={alerts} onAcknowledge={ackAlert} />
@@ -334,11 +370,15 @@ export default function App() {
 
         {/* Tab 6: SLA Reports */}
         {tab === 'sla' && (
-          <section className="glass-panel">
+          <section className="sonexo-panel">
             <ReportsView />
           </section>
         )}
       </main>
+
+      <footer className="sonexo-footer">
+        NetMonitor · Distributed Network Management System · Designed by Wijerathna K.A.A.M. (EG/2023/5971)
+      </footer>
     </div>
   );
 }
