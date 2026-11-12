@@ -7,6 +7,8 @@ import LatencyChart from './components/LatencyChart.jsx';
 import SubnetDiscovery from './components/SubnetDiscovery.jsx';
 import AlertPanel from './components/AlertPanel.jsx';
 import ReportsView from './components/ReportsView.jsx';
+import OpManagerTopology from './components/OpManagerTopology.jsx';
+import OpManagerWidgets from './components/OpManagerWidgets.jsx';
 
 function upsert(list, item) {
   return list.some((x) => x.id === item.id)
@@ -15,7 +17,7 @@ function upsert(list, item) {
 }
 
 export default function App() {
-  const [tab, setTab] = useState('devices');
+  const [tab, setTab] = useState('noc');
   const [devices, setDevices] = useState([]);
   const [agents, setAgents] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -23,6 +25,7 @@ export default function App() {
   const [live, setLive] = useState(false);
   const [error, setError] = useState('');
   const [user, setUser] = useState({ username: 'admin', role: 'ADMIN' });
+  const [lastRefreshed, setLastRefreshed] = useState(new Date().toLocaleTimeString());
 
   const loadAll = useCallback(() => {
     Promise.all([api.getDevices(), api.getAgents(), api.getAlerts()])
@@ -30,6 +33,7 @@ export default function App() {
         setDevices(deviceList);
         setAgents(agentList);
         setAlerts(alertList);
+        setLastRefreshed(new Date().toLocaleTimeString());
         setError('');
         if (!selectedId && deviceList.length > 0) {
           setSelectedId(deviceList[0].id);
@@ -94,56 +98,78 @@ export default function App() {
   const unackAlertsCount = alerts.filter((a) => !a.acknowledged).length;
 
   return (
-    <div className="netmonitor-layout">
-      {/* Top Navigation Bar */}
-      <header className="netmonitor-navbar">
-        <div className="navbar-brand">
-          <div className="brand-logo-hex">
-            <span className="hex-icon">⚡</span>
-          </div>
-          <div>
-            <div className="brand-title">
-              NET<span>MONITOR</span>
+    <div className="netmonitor-layout opmanager-theme">
+      {/* OpManager Top App Bar */}
+      <header className="opm-navbar">
+        <div className="opm-nav-left">
+          <div className="opm-brand-badge">
+            <span className="opm-brand-logo">📊</span>
+            <div>
+              <div className="opm-brand-name">
+                NetMonitor <span>OpManager Edition</span>
+              </div>
+              <div className="opm-brand-sub">Enterprise IT Infrastructure Monitoring</div>
             </div>
-            <div className="brand-sub">Distributed Network Management Suite</div>
           </div>
         </div>
 
-        <div className="navbar-controls">
-          <div className="live-pill-glass">
-            <span className={`live-beacon ${live ? 'beacon-pulse-green' : 'beacon-red'}`}></span>
-            <span>{live ? 'TELEMETRY LIVE' : 'RECONNECTING'}</span>
+        <div className="opm-nav-center">
+          <div className="opm-alarm-ticker">
+            <span className="ticker-label">INCIDENT ALARMS:</span>
+            <span className="ticker-badge ticker-crit">{count('DOWN')} Down</span>
+            <span className="ticker-badge ticker-warn">{count('DEGRADED')} Trouble</span>
+            <span className="ticker-badge ticker-good">{count('UP')} Clear</span>
           </div>
+        </div>
 
-          <div className="user-profile-badge">
-            <div className="user-avatar-circle">
-              {user.username.slice(0, 1).toUpperCase()}
-            </div>
-            <div className="user-text-info">
-              <span className="user-name">{user.username}</span>
-              <span className="user-role-tag">{user.role}</span>
-            </div>
+        <div className="opm-nav-right">
+          <div className="opm-refresh-badge">
+            <span className="refresh-icon">🔄</span>
+            <span>Live Polling (Every 5s) · {lastRefreshed}</span>
+          </div>
+          <div className="opm-live-indicator">
+            <span className={`opm-beacon ${live ? 'beacon-pulse' : 'beacon-offline'}`}></span>
+            <span>{live ? 'NOC LIVE' : 'DISCONNECTED'}</span>
+          </div>
+          <div className="opm-user-chip">
+            <div className="user-initial">{user.username[0].toUpperCase()}</div>
+            <span>{user.username} ({user.role})</span>
           </div>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="netmonitor-content">
+      <main className="opm-main-content">
         {error && <div className="error-banner">⚠️ {error}</div>}
 
-        {/* Navigation Tabs */}
-        <div className="nav-tabs-glass">
+        {/* Tab Navigation (OpManager Style) */}
+        <div className="opm-tabs-shelf">
           <button
-            className={`tab-item ${tab === 'devices' ? 'tab-item-active' : ''}`}
-            onClick={() => setTab('devices')}
+            className={`opm-tab ${tab === 'noc' ? 'opm-tab-active' : ''}`}
+            onClick={() => setTab('noc')}
           >
-            <span className="tab-icon">📊</span>
-            <span>Dashboard & Devices</span>
-            <span className="tab-pill-count">{devices.length}</span>
+            <span className="tab-icon">🖥️</span>
+            <span>NOC Overview & Top-Talkers</span>
           </button>
 
           <button
-            className={`tab-item ${tab === 'discovery' ? 'tab-item-active' : ''}`}
+            className={`opm-tab ${tab === 'topology' ? 'opm-tab-active' : ''}`}
+            onClick={() => setTab('topology')}
+          >
+            <span className="tab-icon">🗺️</span>
+            <span>Business View (Topology)</span>
+          </button>
+
+          <button
+            className={`opm-tab ${tab === 'inventory' ? 'opm-tab-active' : ''}`}
+            onClick={() => setTab('inventory')}
+          >
+            <span className="tab-icon">📋</span>
+            <span>Device Inventory ({devices.length})</span>
+          </button>
+
+          <button
+            className={`opm-tab ${tab === 'discovery' ? 'opm-tab-active' : ''}`}
             onClick={() => setTab('discovery')}
           >
             <span className="tab-icon">🔍</span>
@@ -151,91 +177,112 @@ export default function App() {
           </button>
 
           <button
-            className={`tab-item ${tab === 'alerts' ? 'tab-item-active' : ''}`}
-            onClick={() => setTab('alerts')}
+            className={`opm-tab ${tab === 'alarms' ? 'opm-tab-active' : ''}`}
+            onClick={() => setTab('alarms')}
           >
             <span className="tab-icon">🚨</span>
-            <span>Incident Alerts</span>
-            {unackAlertsCount > 0 && (
-              <span className="tab-pill-alert">{unackAlertsCount}</span>
-            )}
+            <span>Alarms & Traps</span>
+            {unackAlertsCount > 0 && <span className="tab-pill-alert">{unackAlertsCount}</span>}
           </button>
 
           <button
-            className={`tab-item ${tab === 'reports' ? 'tab-item-active' : ''}`}
-            onClick={() => setTab('reports')}
+            className={`opm-tab ${tab === 'sla' ? 'opm-tab-active' : ''}`}
+            onClick={() => setTab('sla')}
           >
             <span className="tab-icon">📈</span>
-            <span>SLA Reports & CSV</span>
+            <span>SLA Performance & CSV</span>
           </button>
         </div>
 
-        {/* Tab 1: Dashboard & Devices */}
-        {tab === 'devices' && (
-          <div className="dashboard-grid">
-            {/* KPI Stat Cards */}
-            <div className="kpi-cards-grid">
-              <div className="kpi-card kpi-total">
-                <div className="kpi-top">
-                  <span className="kpi-title">TOTAL DEVICES</span>
-                  <span className="kpi-icon">🖥️</span>
-                </div>
-                <div className="kpi-value">{devices.length}</div>
-                <div className="kpi-sub">Across {agents.length} network segments</div>
+        {/* Tab 1: NOC Overview (OpManager Dashboards) */}
+        {tab === 'noc' && (
+          <div className="opm-dashboard-view">
+            {/* OpManager Top Metric Dials */}
+            <div className="opm-metric-tiles">
+              <div className="opm-tile opm-tile-total">
+                <div className="tile-head">TOTAL MONITORED</div>
+                <div className="tile-value">{devices.length}</div>
+                <div className="tile-footer">Across {agents.length} Polling Segments</div>
               </div>
 
-              <div className="kpi-card kpi-up">
-                <div className="kpi-top">
-                  <span className="kpi-title">HEALTHY (UP)</span>
-                  <span className="kpi-icon">🟢</span>
-                </div>
-                <div className="kpi-value text-green">{count('UP')}</div>
-                <div className="kpi-sub">Operational within SLA</div>
+              <div className="opm-tile opm-tile-healthy">
+                <div className="tile-head">HEALTHY / AVAILABLE</div>
+                <div className="tile-value text-green">{count('UP')}</div>
+                <div className="tile-footer">100% In Service</div>
               </div>
 
-              <div className="kpi-card kpi-warn">
-                <div className="kpi-top">
-                  <span className="kpi-title">DEGRADED</span>
-                  <span className="kpi-icon">🟡</span>
-                </div>
-                <div className="kpi-value text-amber">{count('DEGRADED')}</div>
-                <div className="kpi-sub">Packet loss or closed port</div>
+              <div className="opm-tile opm-tile-warn">
+                <div className="tile-head">ATTENTION REQUIRED</div>
+                <div className="tile-value text-amber">{count('DEGRADED')}</div>
+                <div className="tile-footer">Closed Ports / Latency Spikes</div>
               </div>
 
-              <div className="kpi-card kpi-down">
-                <div className="kpi-top">
-                  <span className="kpi-title">CRITICAL (DOWN)</span>
-                  <span className="kpi-icon">🔴</span>
-                </div>
-                <div className="kpi-value text-red">{count('DOWN')}</div>
-                <div className="kpi-sub">Immediate action required</div>
+              <div className="opm-tile opm-tile-down">
+                <div className="tile-head">DEVICES DOWN</div>
+                <div className="tile-value text-red">{count('DOWN')}</div>
+                <div className="tile-footer">Unreachable Node Alarm</div>
               </div>
 
-              <div className="kpi-card kpi-agents">
-                <div className="kpi-top">
-                  <span className="kpi-title">ACTIVE AGENTS</span>
-                  <span className="kpi-icon">⚡</span>
+              <div className="opm-tile opm-tile-agents">
+                <div className="tile-head">DISTRIBUTED COLLECTORS</div>
+                <div className="tile-value text-cyan">
+                  {agents.filter((a) => a.online).length} / {agents.length}
                 </div>
-                <div className="kpi-value text-cyan">
-                  {agents.filter((a) => a.online).length}/{agents.length}
-                </div>
-                <div className="kpi-sub">Distributed polling workers</div>
+                <div className="tile-footer">Active TLS Socket Agents</div>
               </div>
             </div>
 
-            {/* Live Chart Section */}
+            {/* Modular OpManager Widgets (Top CPU, Response Time, Alarms) */}
+            <OpManagerWidgets
+              devices={devices}
+              alerts={alerts}
+              onSelectDevice={setSelectedId}
+            />
+
+            {/* Live Telemetry Dial & Drill-Down Snapshot */}
             {selected && (
-              <section className="glass-panel">
+              <section className="glass-panel opm-drilldown-panel">
+                <div className="panel-header-row">
+                  <div>
+                    <h3 className="panel-title">Device Telemetry Snapshot · {selected.name}</h3>
+                    <p className="muted">Live Response Time, Packet Loss & Interface Analytics</p>
+                  </div>
+                  <span className="badge-opm-tag">{selected.host}</span>
+                </div>
                 <LatencyChart device={selected} />
               </section>
             )}
+          </div>
+        )}
 
-            {/* Devices Table Panel */}
+        {/* Tab 2: Topology / Business View */}
+        {tab === 'topology' && (
+          <section className="glass-panel">
+            <div className="panel-header-row">
+              <div>
+                <h3 className="panel-title">Network Business View & Layer-2 Topology Map</h3>
+                <p className="muted">Visual network hierarchy with live traffic light status and link telemetry</p>
+              </div>
+            </div>
+            <OpManagerTopology
+              devices={devices}
+              selectedId={selectedId}
+              onSelectDevice={(id) => {
+                setSelectedId(id);
+                setTab('noc');
+              }}
+            />
+          </section>
+        )}
+
+        {/* Tab 3: Device Inventory */}
+        {tab === 'inventory' && (
+          <div className="opm-inventory-view">
             <section className="glass-panel">
               <div className="panel-header-row">
                 <div>
-                  <h3 className="panel-title">Monitored Network Endpoints</h3>
-                  <p className="muted">Live ICMP, TCP service state & SNMP telemetry across segments</p>
+                  <h3 className="panel-title">Infrastructure Device Inventory</h3>
+                  <p className="muted">Full multi-vendor device roster with SNMP MIB attributes & port checks</p>
                 </div>
               </div>
 
@@ -247,18 +294,17 @@ export default function App() {
               />
 
               {user.role === 'ADMIN' && (
-                <div style={{ marginTop: '20px' }}>
+                <div style={{ marginTop: '24px' }}>
                   <DeviceForm agents={agents} onAdd={addDevice} />
                 </div>
               )}
             </section>
 
-            {/* Distributed Agents Panel */}
             <section className="glass-panel">
               <div className="panel-header-row">
                 <div>
-                  <h3 className="panel-title">Distributed Monitoring Agents</h3>
-                  <p className="muted">Outbound TLS sockets with 1-hour offline FIFO buffering</p>
+                  <h3 className="panel-title">Distributed Polling Collectors (FR6)</h3>
+                  <p className="muted">Agent daemons collecting ICMP & SNMP across discrete subnets</p>
                 </div>
               </div>
               <AgentList agents={agents} devices={devices} />
@@ -266,28 +312,28 @@ export default function App() {
           </div>
         )}
 
-        {/* Tab 2: Discovery */}
+        {/* Tab 4: Subnet Discovery */}
         {tab === 'discovery' && (
           <section className="glass-panel">
             <SubnetDiscovery agents={agents} onAddDevice={addDevice} />
           </section>
         )}
 
-        {/* Tab 3: Alerts */}
-        {tab === 'alerts' && (
+        {/* Tab 5: Alarms */}
+        {tab === 'alarms' && (
           <section className="glass-panel">
             <div className="panel-header-row">
               <div>
-                <h3 className="panel-title">Threshold Violations & Incidents</h3>
-                <p className="muted">Real-time alerts triggered on packet loss, host failures, or latency spikes</p>
+                <h3 className="panel-title">Alarm & Trap Console (Root Cause Hotlist)</h3>
+                <p className="muted">OpManager-grade fault management and operator acknowledgement workflow</p>
               </div>
             </div>
             <AlertPanel alerts={alerts} onAcknowledge={ackAlert} />
           </section>
         )}
 
-        {/* Tab 4: Reports */}
-        {tab === 'reports' && (
+        {/* Tab 6: SLA Reports */}
+        {tab === 'sla' && (
           <section className="glass-panel">
             <ReportsView />
           </section>
