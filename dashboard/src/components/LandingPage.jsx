@@ -214,3 +214,4 @@ export default function LandingPage({ onOpenLogin, onQuickDemo }) {
     </div>
   );
 }
+
