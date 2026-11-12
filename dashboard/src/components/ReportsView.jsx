@@ -15,18 +15,21 @@ export default function ReportsView() {
   }, [hours]);
 
   return (
-    <div className="reports-pane">
-      <div className="reports-top-bar">
+    <div className="sonexo-card-section">
+      <div className="reports-top-hero">
         <div>
-          <h3>Network SLA & Uptime Telemetry</h3>
-          <p className="muted">Statistical aggregation across sliding measurement windows with CSV export compliance.</p>
+          <span className="sonexo-chip">📊 Historical SLA Telemetry</span>
+          <h3 className="section-main-title">Network Availability & SLA Compliance</h3>
+          <p className="section-desc">
+            Aggregated uptime compliance percentages and response latency records across sliding time intervals.
+          </p>
         </div>
 
-        <div className="reports-controls">
-          <div className="select-wrapper">
-            <label>Time Window:</label>
+        <div className="reports-actions-flex">
+          <div className="select-box-wrap">
+            <label className="select-lbl">Report Window:</label>
             <select
-              className="select-field"
+              className="sonexo-select-field"
               value={hours}
               onChange={(e) => setHours(Number(e.target.value))}
             >
@@ -38,37 +41,40 @@ export default function ReportsView() {
             </select>
           </div>
 
-          <a href={api.exportCsvUrl()} className="btn-modern-primary btn-export" download>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <a href={api.exportCsvUrl()} className="btn-glowing-orange" download>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Export Telemetry CSV
+            Export CSV Dataset
           </a>
         </div>
       </div>
 
       {loading ? (
-        <div className="chart-loading">Compiling SLA reports...</div>
+        <div className="graph-loading-state">
+          <span className="sonexo-spinner"></span>
+          <span>Aggregating SLA telemetry records...</span>
+        </div>
       ) : (
         <div className="table-responsive">
           <table className="glass-table">
             <thead>
               <tr>
-                <th>Device Name</th>
-                <th>IP Address</th>
-                <th>Current Status</th>
-                <th>Telemetry Samples</th>
-                <th>SLA Uptime %</th>
-                <th>Avg Round-Trip Latency</th>
+                <th>Device Endpoint</th>
+                <th>Host IP Address</th>
+                <th>Current State</th>
+                <th>Recorded Probes</th>
+                <th>SLA Availability Score</th>
+                <th>Average Ping Latency</th>
               </tr>
             </thead>
             <tbody>
               {data.map((row) => (
                 <tr key={row.deviceId} className="table-row">
                   <td>
-                    <strong className="device-title">{row.name}</strong>
+                    <strong className="text-white" style={{ fontSize: '13px' }}>{row.name}</strong>
                   </td>
                   <td>
                     <code className="ip-badge">{row.host}</code>
@@ -80,26 +86,37 @@ export default function ReportsView() {
                     </span>
                   </td>
                   <td>
-                    <span className="samples-tag">{row.sampleCount} probes</span>
+                    <span className="mono-font text-dim" style={{ fontSize: '12px' }}>{row.sampleCount} samples</span>
                   </td>
                   <td>
-                    <div className="uptime-progress-cell">
-                      <div className="uptime-bar-bg">
+                    <div className="sonexo-progress-cell">
+                      <div className="progress-track-bg">
                         <div
-                          className="uptime-bar-fill"
+                          className="progress-fill-glow"
                           style={{
                             width: `${row.uptimePercentage}%`,
-                            backgroundColor: row.uptimePercentage > 95 ? '#10b981' : row.uptimePercentage > 80 ? '#f59e0b' : '#ef4444'
+                            background:
+                              row.uptimePercentage > 95
+                                ? 'linear-gradient(90deg, #10b981, #34d399)'
+                                : row.uptimePercentage > 80
+                                ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+                                : 'linear-gradient(90deg, #ff334b, #f87171)',
+                            boxShadow: row.uptimePercentage > 95 ? '0 0 8px rgba(16, 185, 129, 0.5)' : 'none',
                           }}
                         ></div>
                       </div>
-                      <span className="uptime-val-text" style={{ color: row.uptimePercentage > 95 ? '#10b981' : '#f59e0b' }}>
+                      <span
+                        className="progress-pct-val mono-font"
+                        style={{
+                          color: row.uptimePercentage > 95 ? '#10b981' : row.uptimePercentage > 80 ? '#f59e0b' : '#ff334b',
+                        }}
+                      >
                         {row.uptimePercentage}%
                       </span>
                     </div>
                   </td>
                   <td>
-                    <span className="metric-num metric-good">{row.averageLatencyMs} ms</span>
+                    <span className="metric-num val-orange">{row.averageLatencyMs} ms</span>
                   </td>
                 </tr>
               ))}

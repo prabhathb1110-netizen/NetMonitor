@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,6 +19,7 @@ export default function LatencyChart({ device }) {
   const [hours, setHours] = useState(1);
   const [points, setPoints] = useState([]);
   const [loading, setLoading] = useState(false);
+  const chartRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,22 +48,49 @@ export default function LatencyChart({ device }) {
   const avgLat = points.filter((p) => p.latencyMs != null).length
     ? (points.reduce((acc, p) => acc + (p.latencyMs || 0), 0) / points.filter((p) => p.latencyMs != null).length).toFixed(1)
     : '—';
+  const maxLat = points.filter((p) => p.latencyMs != null).length
+    ? Math.max(...points.filter((p) => p.latencyMs != null).map((p) => p.latencyMs)).toFixed(1)
+    : '—';
+  const minLat = points.filter((p) => p.latencyMs != null).length
+    ? Math.min(...points.filter((p) => p.latencyMs != null).map((p) => p.latencyMs)).toFixed(1)
+    : '—';
+
+  // Custom fiery orange glowing gradient
+  const createGradient = (ctx) => {
+    if (!ctx) return 'rgba(255, 106, 0, 0.15)';
+    const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+    gradient.addColorStop(0, 'rgba(255, 122, 24, 0.45)');
+    gradient.addColorStop(0.5, 'rgba(255, 94, 0, 0.18)');
+    gradient.addColorStop(1, 'rgba(255, 60, 0, 0.0)');
+    return gradient;
+  };
 
   const data = {
-    labels: points.map((p) => new Date(p.checkedAt || p.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+    labels: points.map((p) =>
+      new Date(p.checkedAt || p.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    ),
     datasets: [
       {
-        label: 'Latency (ms)',
+        label: 'Ping RTT (ms)',
         data: points.map((p) => (p.up ? p.latencyMs : null)),
-        borderColor: '#38bdf8',
-        backgroundColor: 'rgba(56, 189, 248, 0.08)',
+        borderColor: '#ff7a18',
+        backgroundColor: (context) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+          return createGradient(ctx);
+        },
         fill: true,
-        borderWidth: 2.5,
-        pointBackgroundColor: '#0284c7',
-        pointBorderColor: '#38bdf8',
-        pointRadius: points.length > 50 ? 0 : 3,
-        pointHoverRadius: 6,
-        tension: 0.35,
+        borderWidth: 2.8,
+        pointBackgroundColor: '#ff9d42',
+        pointBorderColor: '#ff5e00',
+        pointBorderWidth: 2,
+        pointRadius: points.length > 50 ? 0 : 3.5,
+        pointHoverRadius: 7,
+        pointHoverBackgroundColor: '#ffffff',
+        pointHoverBorderColor: '#ff6a00',
+        pointHoverBorderWidth: 3,
+        tension: 0.38,
       },
     ],
   };
@@ -71,79 +99,104 @@ export default function LatencyChart({ device }) {
     animation: false,
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        backgroundColor: 'rgba(7, 10, 16, 0.92)',
         titleColor: '#f8fafc',
-        bodyColor: '#38bdf8',
-        borderColor: '#334155',
-        borderWidth: 1,
-        padding: 10,
+        bodyColor: '#ffae57',
+        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+        bodyFont: { family: 'JetBrains Mono', size: 13, weight: '600' },
+        borderColor: 'rgba(255, 120, 30, 0.4)',
+        borderWidth: 1.5,
+        padding: 12,
+        cornerRadius: 10,
         displayColors: false,
+        boxShadow: '0 0 16px rgba(255, 106, 0, 0.4)',
         callbacks: {
-          label: (ctx) => `Response Latency: ${ctx.parsed.y} ms`,
+          label: (ctx) => `  ⚡ Response Time: ${ctx.parsed.y} ms`,
         },
       },
     },
     scales: {
       x: {
-        grid: { color: 'rgba(51, 65, 85, 0.25)' },
-        ticks: { color: '#64748b', maxTicksLimit: 10, font: { size: 11 } },
+        grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
+        ticks: { color: '#64748b', maxTicksLimit: 8, font: { family: 'Plus Jakarta Sans', size: 11 } },
       },
       y: {
         beginAtZero: true,
-        grid: { color: 'rgba(51, 65, 85, 0.25)' },
-        ticks: { color: '#64748b', font: { size: 11 } },
-        title: { display: true, text: 'Milliseconds (ms)', color: '#94a3b8', font: { size: 12 } },
+        grid: { color: 'rgba(255, 255, 255, 0.04)', drawBorder: false },
+        ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 11 } },
+        title: {
+          display: true,
+          text: 'Latency (ms)',
+          color: '#8492a6',
+          font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
+        },
       },
     },
   };
 
   return (
-    <div className="analytics-card-inner">
-      <div className="chart-header-row">
-        <div>
-          <div className="chart-device-badge">
-            <span className={`pill-dot ${device.status === 'UP' ? 'dot-up' : 'dot-warn'}`}></span>
-            <h3>{device.name}</h3>
-            <code className="chart-ip-label">{device.host}</code>
+    <div className="sonexo-graph-wrapper">
+      {/* Graph Top Header Bar */}
+      <div className="graph-header-flex">
+        <div className="graph-device-meta">
+          <div className="device-identity-group">
+            <div className="device-beacon-glow"></div>
+            <h3 className="device-heading">{device.name}</h3>
+            <code className="device-ip-chip">{device.host}</code>
+            <span className="device-group-chip">{device.deviceGroup || 'Infrastructure'}</span>
           </div>
-          <div className="chart-meta-chips">
-            {uptime !== null && (
-              <span className="metric-chip">
-                Uptime: <strong style={{ color: uptime > 95 ? '#10b981' : '#f59e0b' }}>{uptime}%</strong>
-              </span>
-            )}
-            <span className="metric-chip">
-              Avg Latency: <strong>{avgLat} ms</strong>
-            </span>
-            <span className="metric-chip">
-              Monitored by: <strong>{device.agentId}</strong>
-            </span>
+          <div className="device-stat-pills">
+            <div className="meta-pill">
+              <span className="pill-lbl">Uptime SLA</span>
+              <span className="pill-val text-green">{uptime !== null ? `${uptime}%` : '—'}</span>
+            </div>
+            <div className="meta-pill">
+              <span className="pill-lbl">Avg Ping</span>
+              <span className="pill-val val-orange">{avgLat} ms</span>
+            </div>
+            <div className="meta-pill">
+              <span className="pill-lbl">Min / Max</span>
+              <span className="pill-val text-dim">{minLat} / {maxLat} ms</span>
+            </div>
+            <div className="meta-pill">
+              <span className="pill-lbl">Assigned Poller</span>
+              <span className="pill-val val-orange">{device.agentId}</span>
+            </div>
           </div>
         </div>
 
-        <div className="range-selector-group">
+        {/* Time Window Capsule Buttons */}
+        <div className="graph-range-capsule">
           {RANGES.map((h) => (
             <button
               key={h}
-              className={`btn-range ${h === hours ? 'btn-range-active' : ''}`}
+              className={`range-pill-btn ${h === hours ? 'range-pill-active' : ''}`}
               onClick={() => setHours(h)}
             >
-              Last {h}h
+              {h}h Window
             </button>
           ))}
         </div>
       </div>
 
+      {/* Chart Canvas Area */}
       {loading ? (
-        <div className="chart-loading">Fetching telemetry data...</div>
+        <div className="graph-loading-state">
+          <span className="sonexo-spinner"></span>
+          <span>Streaming high-velocity telemetry points...</span>
+        </div>
       ) : points.length === 0 ? (
-        <div className="chart-empty">No telemetry recorded for this timeframe.</div>
+        <div className="graph-empty-state">No telemetry recorded for this timeframe.</div>
       ) : (
-        <div className="chart-canvas-wrapper">
-          <Line data={data} options={options} />
+        <div className="graph-canvas-container">
+          <Line ref={chartRef} data={data} options={options} />
         </div>
       )}
     </div>

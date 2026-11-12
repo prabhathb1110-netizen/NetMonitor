@@ -37,24 +37,24 @@ export default function DeviceForm({ agents, onAdd }) {
   }
 
   return (
-    <div className="form-card-wrapper">
-      <div className="form-header-bar" onClick={() => setExpanded(!expanded)}>
-        <div className="form-header-left">
-          <span className="form-icon">➕</span>
-          <span className="form-header-title">Add New Monitored Device</span>
+    <div className="sonexo-form-drawer">
+      <div className="drawer-header-trigger" onClick={() => setExpanded(!expanded)}>
+        <div className="drawer-left-title">
+          <span className="drawer-glow-icon">➕</span>
+          <span className="drawer-title-text">Register New Network Device</span>
         </div>
-        <button type="button" className="btn-toggle-expand">
-          {expanded ? 'Collapse −' : 'Expand Form +'}
+        <button type="button" className="btn-secondary-glow" style={{ padding: '6px 16px', fontSize: '12px' }}>
+          {expanded ? 'Close Form −' : '+ Expand Form'}
         </button>
       </div>
 
       {expanded && (
-        <form className="advanced-form" onSubmit={submit}>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Device Name</label>
+        <form className="sonexo-animated-form" onSubmit={submit}>
+          <div className="form-fields-grid">
+            <div className="input-group">
+              <label className="field-label">Device Identifier</label>
               <input
-                className="input-field"
+                className="sonexo-input-field"
                 value={form.name}
                 onChange={set('name')}
                 placeholder="e.g. Core-Switch-01"
@@ -62,10 +62,10 @@ export default function DeviceForm({ agents, onAdd }) {
               />
             </div>
 
-            <div className="form-group">
-              <label>IP Address / Hostname</label>
+            <div className="input-group">
+              <label className="field-label">IPv4 / FQDN Hostname</label>
               <input
-                className="input-field mono-font"
+                className="sonexo-input-field mono-font"
                 value={form.host}
                 onChange={set('host')}
                 placeholder="192.168.1.1"
@@ -73,30 +73,30 @@ export default function DeviceForm({ agents, onAdd }) {
               />
             </div>
 
-            <div className="form-group">
-              <label>TCP Ports (Optional)</label>
+            <div className="input-group">
+              <label className="field-label">TCP Service Ports (Optional)</label>
               <input
-                className="input-field mono-font"
+                className="sonexo-input-field mono-font"
                 value={form.tcpPorts}
                 onChange={set('tcpPorts')}
                 placeholder="22, 80, 443, 8080"
               />
             </div>
 
-            <div className="form-group">
-              <label>Group / Tag</label>
+            <div className="input-group">
+              <label className="field-label">Logical Group / Segment</label>
               <input
-                className="input-field"
+                className="sonexo-input-field"
                 value={form.deviceGroup}
                 onChange={set('deviceGroup')}
-                placeholder="Infrastructure, Web, DB..."
+                placeholder="Gateways, Servers, Storage..."
               />
             </div>
 
-            <div className="form-group">
-              <label>Assign to Agent</label>
+            <div className="input-group">
+              <label className="field-label">Collector Agent</label>
               <select
-                className="select-field"
+                className="sonexo-select-field"
                 value={form.agentId || (agents[0]?.id || 'agent-a')}
                 onChange={set('agentId')}
                 required
@@ -110,29 +110,30 @@ export default function DeviceForm({ agents, onAdd }) {
               </select>
             </div>
 
-            <div className="form-group form-checkbox-group">
-              <label className="checkbox-label">
+            <div className="input-group checkbox-align-group">
+              <label className="checkbox-glow-label">
                 <input
                   type="checkbox"
                   checked={form.snmpEnabled}
                   onChange={set('snmpEnabled')}
                 />
-                <span>Enable SNMP Polling</span>
+                <span>Enable SNMP Telemetry</span>
               </label>
               {form.snmpEnabled && (
                 <input
-                  className="input-field snmp-comm"
+                  className="sonexo-input-field"
+                  style={{ marginTop: '8px' }}
                   value={form.snmpCommunity}
                   onChange={set('snmpCommunity')}
-                  placeholder="Community (e.g. public)"
+                  placeholder="Community String (e.g. public)"
                 />
               )}
             </div>
           </div>
 
-          <div className="form-action-bar">
-            {error && <span className="form-error-msg">{error}</span>}
-            <button type="submit" className="btn-modern-primary" disabled={saving}>
+          <div className="form-footer-actions">
+            {error && <span className="sonexo-inline-error">{error}</span>}
+            <button type="submit" className="btn-glowing-orange" disabled={saving}>
               {saving ? 'Registering Device...' : 'Add Device to Poller'}
             </button>
           </div>

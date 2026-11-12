@@ -43,21 +43,22 @@ export default function SubnetDiscovery({ agents, onAddDevice }) {
   }
 
   return (
-    <div className="discovery-pane">
-      <div className="discovery-header-card">
-        <div className="discovery-intro">
-          <h3>Subnet Ping Sweep & Host Discovery</h3>
-          <p className="muted">
-            The assigned agent runs ICMP echo & TCP SYN discovery probes across the CIDR subnet and reports active hosts.
-          </p>
+    <div className="sonexo-card-section">
+      <div className="discovery-hero-card">
+        <div className="discovery-badge-row">
+          <span className="sonexo-chip">⚡ Automated Discovery Engine</span>
         </div>
+        <h3 className="section-main-title">Subnet Ping Sweep & Host Detection</h3>
+        <p className="section-desc">
+          Dispatches ICMP Echo & SYN discovery probes across the network segment to detect live endpoints and services.
+        </p>
 
-        <form onSubmit={handleScan} className="discovery-scan-form">
-          <div className="discovery-field">
-            <label>Subnet Range (CIDR):</label>
+        <form onSubmit={handleScan} className="sonexo-discovery-bar">
+          <div className="discovery-input-wrap">
+            <label className="field-label">Target Subnet (CIDR)</label>
             <input
               type="text"
-              className="input-field mono-font"
+              className="sonexo-input-field mono-font"
               value={subnet}
               onChange={(e) => setSubnet(e.target.value)}
               placeholder="192.168.1.0/24"
@@ -65,10 +66,10 @@ export default function SubnetDiscovery({ agents, onAddDevice }) {
             />
           </div>
 
-          <div className="discovery-field">
-            <label>Discovery Agent:</label>
+          <div className="discovery-input-wrap">
+            <label className="field-label">Assigned Collector Agent</label>
             <select
-              className="select-field"
+              className="sonexo-select-field"
               value={selectedAgent}
               onChange={(e) => setSelectedAgent(e.target.value)}
             >
@@ -80,63 +81,70 @@ export default function SubnetDiscovery({ agents, onAddDevice }) {
             </select>
           </div>
 
-          <button type="submit" disabled={scanning} className="btn-modern-primary btn-scan">
+          <button type="submit" disabled={scanning} className="btn-glowing-orange btn-sweep-trigger">
             {scanning ? (
-              <span className="scanning-indicator">
-                <span className="spinner"></span> Sweeping Subnet...
+              <span className="btn-loading-flex">
+                <span className="sonexo-spinner"></span> Scanning Subnet...
               </span>
             ) : (
-              '⚡ Run Subnet Sweep'
+              '⚡ Launch Ping Sweep'
             )}
           </button>
         </form>
       </div>
 
-      {error && <div className="error-banner">{error}</div>}
+      {error && <div className="sonexo-error-banner">⚠️ {error}</div>}
 
       {results.length > 0 && (
-        <div className="table-responsive discovery-results-table">
-          <table className="glass-table">
-            <thead>
-              <tr>
-                <th>Discovered Host</th>
-                <th>Response Time</th>
-                <th>Availability</th>
-                <th>Network Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((r) => (
-                <tr key={r.ip} className="table-row">
-                  <td>
-                    <code className="ip-badge">{r.ip}</code>
-                  </td>
-                  <td>
-                    <span className="metric-num metric-good">{r.latencyMs} ms</span>
-                  </td>
-                  <td>
-                    <span className="pill-badge pill-up">
-                      <span className="pill-dot"></span>
-                      {r.status}
-                    </span>
-                  </td>
-                  <td>
-                    {r.alreadyAdded ? (
-                      <span className="already-monitored-badge">✓ In Monitoring List</span>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn-add-discovered"
-                        onClick={() => addDiscovered(r)}
-                      >
-                        + Add To Poller
-                      </button>
-                    )}
-                  </td>
+        <div className="discovery-results-panel">
+          <div className="results-header-row">
+            <h4>Discovered Active Endpoints ({results.length})</h4>
+            <span className="results-sub">Responsive to ICMP / TCP SYN probe</span>
+          </div>
+
+          <div className="table-responsive">
+            <table className="glass-table">
+              <thead>
+                <tr>
+                  <th>Discovered Host IP</th>
+                  <th>RTT Response Latency</th>
+                  <th>Interface Availability</th>
+                  <th style={{ textAlign: 'right' }}>Add to Telemetry Poller</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {results.map((r) => (
+                  <tr key={r.ip} className="table-row">
+                    <td>
+                      <code className="ip-badge">{r.ip}</code>
+                    </td>
+                    <td>
+                      <span className="metric-num val-orange">{r.latencyMs} ms</span>
+                    </td>
+                    <td>
+                      <span className="pill-badge pill-up">
+                        <span className="pill-dot"></span>
+                        {r.status}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      {r.alreadyAdded ? (
+                        <span className="monitored-check">✓ Active in Poller</span>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn-add-poller-glow"
+                          onClick={() => addDiscovered(r)}
+                        >
+                          + Monitor Device
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

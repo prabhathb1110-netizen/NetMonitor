@@ -1,10 +1,10 @@
 export default function AlertPanel({ alerts, onAcknowledge }) {
   if (!alerts || alerts.length === 0) {
     return (
-      <div className="empty-state">
-        <div className="empty-icon text-green">🛡️</div>
-        <h3>All Systems Nominal</h3>
-        <p className="muted">No thresholds have been exceeded. All monitored devices are within SLA.</p>
+      <div className="sonexo-empty-state">
+        <div className="empty-ring-glow">🛡️</div>
+        <h3 className="empty-title">All Network Interfaces Clear</h3>
+        <p className="empty-desc">Zero active threshold breaches. All monitored endpoints operate within strict SLA bounds.</p>
       </div>
     );
   }
@@ -13,13 +13,15 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
   const resolvedAlerts = alerts.filter((a) => a.acknowledged);
 
   return (
-    <div className="alerts-container">
-      <div className="alerts-summary-strip">
-        <div className="summary-pill active-pill">
-          Active Incidents: <strong>{activeAlerts.length}</strong>
+    <div className="sonexo-card-section">
+      {/* Alarms Header KPI Row */}
+      <div className="alarm-kpi-strip">
+        <div className="alarm-pill-stat stat-pill-active">
+          <span className="dot-pulse-red"></span>
+          <span>Active Critical Incidents: <strong>{activeAlerts.length}</strong></span>
         </div>
-        <div className="summary-pill resolved-pill">
-          Acknowledged: <strong>{resolvedAlerts.length}</strong>
+        <div className="alarm-pill-stat stat-pill-ack">
+          <span>Acknowledged Incidents: <strong>{resolvedAlerts.length}</strong></span>
         </div>
       </div>
 
@@ -27,12 +29,12 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
         <table className="glass-table">
           <thead>
             <tr>
-              <th>Timestamp</th>
-              <th>Severity</th>
-              <th>Device Target</th>
-              <th>Incident Details</th>
-              <th>Status</th>
-              <th style={{ textAlign: 'right' }}>Action</th>
+              <th>Detection Time</th>
+              <th>Incident Severity</th>
+              <th>Target Device</th>
+              <th>Telemetry Violation Message</th>
+              <th>Incident State</th>
+              <th style={{ textAlign: 'right' }}>Operator Action</th>
             </tr>
           </thead>
           <tbody>
@@ -41,9 +43,9 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
               return (
                 <tr
                   key={a.id}
-                  className={`table-row ${!a.acknowledged ? (isCrit ? 'alert-row-crit' : 'alert-row-warn') : 'alert-row-ack'}`}
+                  className={`table-row ${!a.acknowledged ? (isCrit ? 'row-alert-crit-glow' : 'row-alert-warn-glow') : ''}`}
                 >
-                  <td className="timestamp-cell">
+                  <td className="mono-font text-dim" style={{ fontSize: '12px' }}>
                     {new Date(a.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </td>
                   <td>
@@ -53,26 +55,26 @@ export default function AlertPanel({ alerts, onAcknowledge }) {
                     </span>
                   </td>
                   <td>
-                    <strong className="device-target-name">{a.deviceName}</strong>
-                  </td>
-                  <td className="incident-msg-cell">
-                    <span className="incident-text">{a.message}</span>
+                    <strong className="text-white" style={{ fontSize: '13px' }}>{a.deviceName}</strong>
                   </td>
                   <td>
-                    <span className={`ack-badge ${a.acknowledged ? 'ack-done' : 'ack-pending'}`}>
+                    <span className="violation-msg-text">{a.message}</span>
+                  </td>
+                  <td>
+                    <span className={`state-chip ${a.acknowledged ? 'state-chip-ack' : 'state-chip-pending'}`}>
                       {a.acknowledged ? 'Acknowledged' : 'Pending Action'}
                     </span>
                   </td>
                   <td style={{ textAlign: 'right' }}>
                     {!a.acknowledged ? (
                       <button
-                        className="btn-ack"
+                        className="btn-ack-glow"
                         onClick={() => onAcknowledge(a.id)}
                       >
                         ✓ Acknowledge
                       </button>
                     ) : (
-                      <span className="muted-dash">Resolved</span>
+                      <span className="text-muted" style={{ fontSize: '12px' }}>Resolved</span>
                     )}
                   </td>
                 </tr>

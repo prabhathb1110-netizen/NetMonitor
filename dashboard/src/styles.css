@@ -1,6 +1,6 @@
 /* ==========================================================================
-   NetMonitor - Premium Sonexo Dark Neumorphic & Glowing Cyber UI Theme
-   Deep black base (#030508, #070a10) with fiery orange-amber luminescent glow (#ff5e00, #ff7a18)
+   NetMonitor - Sonexo Dark Neumorphic Glowing Cyber UI Theme
+   Obsidian Deep (#030508) + Radiating Volcanic Orange-Amber Luminescence (#ff6a00, #ff8c33)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -9,40 +9,32 @@
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Deep Black & Volcanic Glow Palette */
+  /* Deep Black & Glowing Cyber Palette */
   --bg-deep: #030508;
-  --bg-surface: #0a0e17;
-  --bg-card: rgba(13, 18, 29, 0.72);
-  --bg-card-hover: rgba(20, 27, 43, 0.85);
-  --bg-inner: rgba(5, 8, 14, 0.6);
+  --bg-surface: #090e18;
+  --bg-card: rgba(12, 17, 28, 0.75);
+  --bg-inner: rgba(5, 8, 14, 0.7);
 
-  /* Signature Orange Ember / Neon Glow */
+  /* Primary Orange Glow & Ember Accents */
   --primary-orange: #ff6a00;
-  --primary-glow: #ff7f24;
+  --primary-glow: #ff7a18;
   --primary-amber: #ff9d42;
-  --primary-soft: rgba(255, 106, 0, 0.15);
   --primary-border: rgba(255, 120, 30, 0.28);
   --primary-border-glow: rgba(255, 120, 30, 0.65);
-  --primary-shadow: 0 0 24px rgba(255, 106, 0, 0.35);
 
-  /* Status Accents (Refined & Vibrant) */
+  /* Neon Status */
   --neon-green: #10b981;
-  --neon-green-glow: rgba(16, 185, 129, 0.25);
   --neon-amber: #f59e0b;
-  --neon-amber-glow: rgba(245, 158, 11, 0.25);
   --neon-red: #ff334b;
-  --neon-red-glow: rgba(255, 51, 75, 0.35);
   --neon-cyan: #38bdf8;
 
-  /* Typography Colors */
+  /* Typography */
   --text-white: #ffffff;
   --text-dim: #cbd5e1;
   --text-muted: #8492a6;
   --text-subtle: #4b5563;
 
-  /* Premium Borders & Glass */
   --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(255, 120, 30, 0.45);
   --glass-blur: blur(20px);
 }
 
@@ -62,15 +54,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Background Atmosphere Glow (Inspired by Sonexo's radiating orange halo) */
+/* Atmospheric Ambient Glowing Halos */
 body::before {
   content: '';
   position: fixed;
-  top: -150px;
+  top: -160px;
   left: 50%;
   transform: translateX(-50%);
-  width: 900px;
-  height: 480px;
+  width: 950px;
+  height: 500px;
   background: radial-gradient(circle, rgba(255, 94, 0, 0.18) 0%, rgba(255, 60, 0, 0.05) 50%, transparent 75%);
   filter: blur(80px);
   pointer-events: none;
@@ -81,16 +73,15 @@ body::after {
   content: '';
   position: fixed;
   bottom: -200px;
-  right: 10%;
-  width: 600px;
-  height: 400px;
+  right: 12%;
+  width: 650px;
+  height: 450px;
   background: radial-gradient(circle, rgba(255, 106, 0, 0.08) 0%, transparent 70%);
   filter: blur(100px);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Main Container */
 .sonexo-layout {
   position: relative;
   z-index: 1;
@@ -99,13 +90,13 @@ body::after {
   flex-direction: column;
 }
 
-/* Top App Bar */
+/* Navigation Bar */
 .sonexo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 42px;
-  background: rgba(7, 10, 16, 0.75);
+  padding: 16px 40px;
+  background: rgba(7, 10, 16, 0.8);
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
@@ -150,10 +141,9 @@ body::after {
   color: var(--primary-orange);
   font-weight: 500;
   font-style: italic;
-  margin-left: 2px;
+  margin-left: 3px;
 }
 
-/* Header Center Pills */
 .sonexo-nav-center {
   display: flex;
   align-items: center;
@@ -164,20 +154,17 @@ body::after {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(13, 18, 29, 0.8);
+  background: rgba(13, 18, 29, 0.85);
   border: 1px solid var(--border-subtle);
   padding: 6px 14px;
   border-radius: 24px;
   font-size: 12px;
 }
 
-.ticker-dot {
+.ticker-dot-orange {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-}
-
-.ticker-dot-orange {
   background: var(--primary-orange);
   box-shadow: 0 0 8px var(--primary-orange);
 }
@@ -207,7 +194,6 @@ body::after {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-/* Header Right Actions */
 .sonexo-header-right {
   display: flex;
   align-items: center;
@@ -223,7 +209,7 @@ body::after {
   border-radius: 24px;
   padding: 9px 22px;
   cursor: pointer;
-  box-shadow: 0 0 22px rgba(255, 106, 0, 0.45);
+  box-shadow: 0 0 24px rgba(255, 106, 0, 0.45);
   transition: all 0.25s ease;
   display: inline-flex;
   align-items: center;
@@ -233,8 +219,30 @@ body::after {
 
 .btn-glowing-orange:hover {
   transform: translateY(-1px);
-  box-shadow: 0 0 30px rgba(255, 106, 0, 0.7);
+  box-shadow: 0 0 32px rgba(255, 106, 0, 0.7);
   background: linear-gradient(135deg, #ff8c33 0%, #ff6a00 100%);
+}
+
+.btn-secondary-glow {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 9px 22px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-secondary-glow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .sonexo-user-pill {
@@ -262,10 +270,10 @@ body::after {
   box-shadow: 0 0 10px rgba(255, 106, 0, 0.5);
 }
 
-/* Hero Section (Sonexo Headline & CTA style) */
+/* Hero Section */
 .sonexo-hero-banner {
   text-align: center;
-  padding: 44px 20px 32px 20px;
+  padding: 42px 20px 30px 20px;
   max-width: 860px;
   margin: 0 auto;
 }
@@ -305,7 +313,7 @@ body::after {
   font-size: 15px;
   color: var(--text-muted);
   line-height: 1.5;
-  margin-bottom: 28px;
+  margin-bottom: 26px;
 }
 
 .hero-cta-group {
@@ -314,29 +322,7 @@ body::after {
   gap: 14px;
 }
 
-.btn-secondary-glow {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-dim);
-  font-weight: 600;
-  font-size: 13px;
-  padding: 9px 22px;
-  border-radius: 24px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.btn-secondary-glow:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-/* Master Glass Shell (Framed container like the tablet preview in Sonexo) */
+/* Master Glass Shell */
 .sonexo-main-shell {
   max-width: 1360px;
   width: 95%;
@@ -349,7 +335,7 @@ body::after {
   backdrop-filter: var(--glass-blur);
 }
 
-/* Glowing Capsule Tabs */
+/* Tabs Bar */
 .sonexo-tabs-bar {
   display: flex;
   gap: 8px;
@@ -400,7 +386,7 @@ body::after {
   box-shadow: 0 0 8px rgba(255, 51, 75, 0.5);
 }
 
-/* Glass Stat Cards (3D Bevel with Top Glow Strip) */
+/* Stat Grid */
 .sonexo-stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -482,7 +468,7 @@ body::after {
   text-shadow: 0 0 14px rgba(255, 51, 75, 0.4);
 }
 
-/* Glass Panels with Dark Radiance */
+/* Panels */
 .sonexo-panel {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
@@ -523,7 +509,165 @@ body::after {
   border-radius: 6px;
 }
 
-/* Neumorphic Tables */
+/* ==========================================================================
+   MODIFIED GRAPH SECTION (Ultra-radiant Sonexo Glowing Chart)
+   ========================================================================== */
+.sonexo-graph-wrapper {
+  background: rgba(5, 8, 14, 0.85);
+  border: 1px solid rgba(255, 120, 30, 0.25);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 106, 0, 0.1);
+}
+
+.graph-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.graph-device-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.device-identity-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.device-beacon-glow {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary-orange);
+  box-shadow: 0 0 12px var(--primary-orange);
+  animation: sonexo-beacon-pulse 1.8s infinite;
+}
+
+@keyframes sonexo-beacon-pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.device-heading {
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.device-ip-chip {
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.device-group-chip {
+  font-size: 11px;
+  background: rgba(255, 106, 0, 0.12);
+  color: var(--primary-amber);
+  border: 1px solid rgba(255, 106, 0, 0.25);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.device-stat-pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.meta-pill {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4px 12px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.pill-lbl {
+  color: var(--text-muted);
+}
+
+.pill-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.graph-range-capsule {
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-subtle);
+  padding: 4px;
+  border-radius: 20px;
+}
+
+.range-pill-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-main);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.range-pill-active {
+  background: linear-gradient(135deg, rgba(255, 106, 0, 0.3), rgba(255, 140, 50, 0.15)) !important;
+  color: #ff9d42 !important;
+  border: 1px solid rgba(255, 120, 30, 0.45) !important;
+  box-shadow: 0 0 12px rgba(255, 106, 0, 0.3);
+}
+
+.graph-canvas-container {
+  height: 280px;
+  width: 100%;
+}
+
+.graph-loading-state, .graph-empty-state {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.sonexo-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 106, 0, 0.2);
+  border-top-color: var(--primary-orange);
+  border-radius: 50%;
+  animation: spinner-rotate 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   TABLES & GENERAL PAGE COMPONENTS (Themed)
+   ========================================================================== */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
@@ -568,7 +712,6 @@ body::after {
   border-left: 3px solid var(--primary-orange);
 }
 
-/* Glow Status Pills */
 .pill-badge {
   display: inline-flex;
   align-items: center;
@@ -591,35 +734,21 @@ body::after {
   color: var(--neon-green);
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
-.pill-up .pill-dot {
-  background: var(--neon-green);
-  box-shadow: 0 0 8px var(--neon-green);
-}
+.pill-up .pill-dot { background: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
 
 .pill-degraded {
   background: rgba(245, 158, 11, 0.12);
   color: var(--neon-amber);
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
-.pill-degraded .pill-dot {
-  background: var(--neon-amber);
-}
+.pill-degraded .pill-dot { background: var(--neon-amber); }
 
 .pill-down {
   background: rgba(255, 51, 75, 0.12);
   color: var(--neon-red);
   border: 1px solid rgba(255, 51, 75, 0.35);
 }
-.pill-down .pill-dot {
-  background: var(--neon-red);
-  box-shadow: 0 0 8px var(--neon-red);
-}
-
-.pill-unknown {
-  background: rgba(100, 116, 139, 0.12);
-  color: var(--text-muted);
-  border: 1px solid rgba(100, 116, 139, 0.25);
-}
+.pill-down .pill-dot { background: var(--neon-red); box-shadow: 0 0 8px var(--neon-red); }
 
 .ip-badge {
   font-family: var(--font-mono);
@@ -637,71 +766,224 @@ body::after {
   font-size: 12px;
 }
 
-.metric-good { color: var(--neon-green); }
-.metric-warn { color: var(--neon-amber); }
-.metric-danger { color: var(--neon-red); }
+.btn-icon-danger {
+  background: transparent;
+  border: none;
+  color: var(--text-subtle);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
 
-/* Form Controls & Inputs */
-.input-field, .select-field {
-  background: rgba(5, 8, 14, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.btn-icon-danger:hover {
+  color: var(--neon-red);
+  background: rgba(255, 51, 75, 0.15);
+}
+
+/* Subnet Discovery & Form Styling */
+.sonexo-card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.discovery-hero-card {
+  background: rgba(5, 8, 14, 0.7);
+  border: 1px solid rgba(255, 120, 30, 0.22);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.section-main-title {
+  font-size: 20px;
+  font-weight: 800;
   color: #fff;
-  border-radius: 8px;
-  padding: 8px 14px;
+  margin: 10px 0 6px 0;
+}
+
+.section-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.sonexo-discovery-bar {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.discovery-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.sonexo-input-field, .sonexo-select-field {
+  width: 100%;
+  background: rgba(5, 8, 14, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
   font-size: 13px;
   outline: none;
   transition: all 0.2s;
 }
 
-.input-field:focus, .select-field:focus {
+.sonexo-input-field:focus, .sonexo-select-field:focus {
   border-color: var(--primary-orange);
-  box-shadow: 0 0 14px rgba(255, 106, 0, 0.3);
+  box-shadow: 0 0 14px rgba(255, 106, 0, 0.35);
 }
 
-/* OpManager Widgets Dark Re-skin */
-.opm-widgets-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 18px;
-  margin-bottom: 24px;
+.btn-sweep-trigger {
+  height: 42px;
+  padding: 0 24px;
 }
 
-.opm-widget-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-
-.opm-widget-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 14px;
-  margin-bottom: 14px;
-}
-
-.opm-widget-title-group h4 {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.opm-badge-category {
-  font-size: 11px;
+.btn-add-poller-glow {
+  background: rgba(255, 106, 0, 0.15);
+  border: 1px solid rgba(255, 120, 30, 0.4);
   color: var(--primary-amber);
-  background: rgba(255, 106, 0, 0.12);
-  border: 1px solid rgba(255, 106, 0, 0.25);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-add-poller-glow:hover {
+  background: var(--primary-orange);
+  color: #070a10;
+  box-shadow: 0 0 14px rgba(255, 106, 0, 0.5);
+}
+
+.monitored-check {
+  font-size: 12px;
+  color: var(--neon-green);
+  font-weight: 700;
+}
+
+/* Alarms Tab Styling */
+.alarm-kpi-strip {
+  display: flex;
+  gap: 14px;
+}
+
+.alarm-pill-stat {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-pill-active {
+  background: rgba(255, 51, 75, 0.15);
+  border: 1px solid rgba(255, 51, 75, 0.35);
+  color: var(--neon-red);
+}
+
+.stat-pill-ack {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-dim);
+}
+
+.row-alert-crit-glow {
+  background: rgba(255, 51, 75, 0.08) !important;
+  border-left: 3px solid var(--neon-red);
+}
+
+.row-alert-warn-glow {
+  background: rgba(245, 158, 11, 0.08) !important;
+  border-left: 3px solid var(--neon-amber);
+}
+
+.btn-ack-glow {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--neon-green);
+  padding: 5px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ack-glow:hover {
+  background: var(--neon-green);
+  color: #070a10;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+}
+
+.state-chip {
+  font-size: 11px;
   padding: 2px 8px;
-  border-radius: 6px;
+  border-radius: 10px;
   font-weight: 600;
 }
 
-.opm-gauge-bar {
+.state-chip-pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--neon-amber);
+}
+
+.state-chip-ack {
+  background: rgba(100, 116, 139, 0.2);
+  color: var(--text-muted);
+}
+
+/* Reports Tab */
+.reports-top-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.reports-actions-flex {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.select-box-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.select-lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.sonexo-progress-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-track-bg {
   width: 90px;
   height: 6px;
   background: rgba(255, 255, 255, 0.08);
@@ -709,87 +991,157 @@ body::after {
   overflow: hidden;
 }
 
-.opm-gauge-fill {
+.progress-fill-glow {
   height: 100%;
   border-radius: 4px;
 }
 
-.opm-stat-row {
+.progress-pct-val {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Agent Cards Grid */
+.sonexo-agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.sonexo-agent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  cursor: pointer;
-  transition: all 0.15s;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
 }
 
-.opm-stat-row:hover {
-  background: rgba(255, 106, 0, 0.03);
+.sonexo-agent-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 120, 30, 0.4);
 }
 
-.opm-alarm-row {
+.agent-card-active-glow {
+  border-color: rgba(255, 120, 30, 0.25);
+}
+
+.agent-card-top {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: rgba(5, 8, 14, 0.6);
-  border: 1px solid rgba(255, 51, 75, 0.2);
-  margin-bottom: 8px;
-  cursor: pointer;
 }
 
-/* Topology View with Fire Embers */
-.topology-view-wrapper {
+.agent-avatar-hex {
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 106, 0, 0.12);
+  border: 1px solid rgba(255, 120, 30, 0.3);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-amber);
+  box-shadow: 0 0 12px rgba(255, 106, 0, 0.25);
+}
+
+.agent-name-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.agent-segment-tag {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.agent-telemetry-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   background: rgba(5, 8, 14, 0.7);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 24px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
-.topo-node {
-  background: rgba(13, 18, 29, 0.8);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 14px 16px;
+.agent-metric-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box-label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.box-val {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.agent-card-bottom {
   display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  min-width: 230px;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-subtle);
+}
+
+/* Device Registration Drawer */
+.sonexo-form-drawer {
+  background: rgba(5, 8, 14, 0.75);
+  border: 1px dashed rgba(255, 120, 30, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
   transition: all 0.2s;
 }
 
-.topo-node:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 120, 30, 0.4);
-  box-shadow: 0 4px 16px rgba(255, 106, 0, 0.2);
+.drawer-header-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
 }
 
-.topo-node-selected {
-  border-color: var(--primary-orange) !important;
-  box-shadow: 0 0 20px rgba(255, 106, 0, 0.35) !important;
+.drawer-left-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.trunk-pulse {
-  background: var(--primary-orange);
-  box-shadow: 0 0 10px var(--primary-orange);
+.drawer-title-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
 }
 
-/* Charts */
-.chart-canvas-wrapper {
-  height: 260px;
-  width: 100%;
+.sonexo-animated-form {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.btn-range-active {
-  background: rgba(255, 106, 0, 0.25) !important;
-  color: var(--primary-amber) !important;
-  border: 1px solid rgba(255, 120, 30, 0.4) !important;
+.form-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
-/* Footer Accent */
+.form-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Footer */
 .sonexo-footer {
   text-align: center;
   padding: 30px;
