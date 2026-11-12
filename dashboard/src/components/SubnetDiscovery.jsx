@@ -81,13 +81,27 @@ export default function SubnetDiscovery({ agents, onAddDevice }) {
             </select>
           </div>
 
-          <button type="submit" disabled={scanning} className="btn-glowing-orange btn-sweep-trigger">
+          <button
+            type="submit"
+            disabled={scanning}
+            className={`btn-sweep-trigger ${scanning ? 'btn-sweep-scanning' : ''}`}
+          >
+            {scanning && <div className="sweep-shimmer-beam"></div>}
+            {scanning && (
+              <div className="sweep-progress-track">
+                <div className="sweep-progress-fill"></div>
+              </div>
+            )}
             {scanning ? (
               <span className="btn-loading-flex">
-                <span className="sonexo-spinner"></span> Scanning Subnet...
+                <span className="sweep-spinner-ring"></span>
+                <span>Probing Subnet...</span>
               </span>
             ) : (
-              '⚡ Launch Ping Sweep'
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                <span>⚡</span>
+                <span>Launch Ping Sweep</span>
+              </span>
             )}
           </button>
         </form>
