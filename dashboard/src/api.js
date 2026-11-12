@@ -52,6 +52,12 @@ export const api = {
     return res.json();
   },
 
+  getMeasurements: async (id, hours = 24) => {
+    const res = await fetch(`${BASE}/api/devices/${id}/measurements?hours=${hours}`);
+    if (!res.ok) throw new Error('Failed to load device measurements');
+    return res.json();
+  },
+
   // Agents (FR6)
   getAgents: async () => {
     const res = await fetch(`${BASE}/api/agents`);
