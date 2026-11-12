@@ -9,6 +9,8 @@ import AlertPanel from './components/AlertPanel.jsx';
 import ReportsView from './components/ReportsView.jsx';
 import OpManagerTopology from './components/OpManagerTopology.jsx';
 import OpManagerWidgets from './components/OpManagerWidgets.jsx';
+import LandingPage from './components/LandingPage.jsx';
+import LoginModal from './components/LoginModal.jsx';
 
 function upsert(list, item) {
   return list.some((x) => x.id === item.id)
@@ -17,6 +19,17 @@ function upsert(list, item) {
 }
 
 export default function App() {
+  // Session & Authentication state (FR10)
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('netmonitor_session');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [tab, setTab] = useState('noc');
   const [devices, setDevices] = useState([]);
   const [agents, setAgents] = useState([]);
@@ -24,9 +37,9 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [live, setLive] = useState(false);
   const [error, setError] = useState('');
-  const [user, setUser] = useState({ username: 'Achintha', role: 'ADMIN' });
 
   const loadAll = useCallback(() => {
+    if (!currentUser) return;
     Promise.all([api.getDevices(), api.getAgents(), api.getAlerts()])
       .then(([deviceList, agentList, alertList]) => {
         setDevices(deviceList);
@@ -38,9 +51,10 @@ export default function App() {
         }
       })
       .catch((e) => setError(`Cannot reach the server: ${e.message}`));
-  }, [selectedId]);
+  }, [currentUser, selectedId]);
 
   useEffect(() => {
+    if (!currentUser) return;
     return connectLive(
       (message) => {
         if (message.type === 'device') setDevices((list) => upsert(list, message.data));
@@ -60,17 +74,41 @@ export default function App() {
         if (connected) loadAll();
       }
     );
-  }, [loadAll]);
+  }, [currentUser, loadAll]);
 
-  useEffect(loadAll, [loadAll]);
+  useEffect(() => {
+    if (currentUser) loadAll();
+  }, [currentUser, loadAll]);
+
+  function handleLoginSuccess(userData) {
+    setCurrentUser(userData);
+    try {
+      localStorage.setItem('netmonitor_session', JSON.stringify(userData));
+    } catch {}
+    setIsLoginOpen(false);
+  }
+
+  function handleLogout() {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('netmonitor_session');
+    } catch {}
+  }
+
+  function handleQuickDemo(role = 'admin') {
+    const demoUser = role === 'admin'
+      ? { token: 'demo-token', username: 'Achintha (Admin)', role: 'ADMIN' }
+      : { token: 'demo-token', username: 'Guest (Viewer)', role: 'VIEWER' };
+    handleLoginSuccess(demoUser);
+  }
 
   async function addDevice(device) {
     await api.addDevice(device);
   }
 
   async function removeDevice(device) {
-    if (user.role !== 'ADMIN') {
-      alert('Only ADMIN users can remove devices.');
+    if (currentUser?.role !== 'ADMIN') {
+      alert('Permission Denied: Only ADMIN operators can remove network endpoints.');
       return;
     }
     if (!window.confirm(`Remove ${device.name} and its telemetry history?`)) return;
@@ -89,6 +127,23 @@ export default function App() {
     } catch (e) {
       setError(e.message);
     }
+  }
+
+  // If user is not logged in, display the Feature Showcase Landing Page
+  if (!currentUser) {
+    return (
+      <>
+        <LandingPage
+          onOpenLogin={() => setIsLoginOpen(true)}
+          onQuickDemo={handleQuickDemo}
+        />
+        <LoginModal
+          isOpen={isLoginOpen}
+          onClose={() => setIsLoginOpen(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      </>
+    );
   }
 
   const count = (status) => devices.filter((d) => d.status === status).length;
@@ -123,17 +178,28 @@ export default function App() {
 
         {/* Header Action Elements */}
         <div className="header-right-actions">
-          <button
-            className="btn-glowing-primary"
-            onClick={() => setTab('discovery')}
-          >
-            <span>+ Scan Network</span>
-          </button>
+          {currentUser.role === 'ADMIN' && (
+            <button
+              className="btn-glowing-primary"
+              onClick={() => setTab('discovery')}
+            >
+              <span>+ Scan Network</span>
+            </button>
+          )}
 
           <div className="user-profile-capsule">
-            <div className="user-avatar-initial">{user.username[0]}</div>
-            <span className="user-name-label">{user.username}</span>
+            <div className="user-avatar-initial">{currentUser.username[0].toUpperCase()}</div>
+            <span className="user-name-label">{currentUser.username}</span>
+            <span className="user-role-badge">{currentUser.role}</span>
           </div>
+
+          <button
+            className="btn-secondary-outline btn-logout-sm"
+            onClick={handleLogout}
+            title="Log Out of System"
+          >
+            Sign Out
+          </button>
         </div>
       </header>
 
@@ -141,7 +207,7 @@ export default function App() {
       <section className="app-hero-section">
         <div className="hero-top-badge">
           <span className="ticker-dot-beacon"></span>
-          <span>Distributed Multi-Segment Polling · Real-time WebSocket</span>
+          <span>Logged in as {currentUser.username} · {currentUser.role} Level Access</span>
         </div>
         <h1 className="hero-main-heading">
           High-Velocity Network Telemetry with <span>NetMonitor</span>
@@ -154,7 +220,7 @@ export default function App() {
             className="btn-glowing-primary"
             onClick={() => setTab('noc')}
           >
-            Launch NOC Console
+            NOC Overview Console
           </button>
           <button
             className="btn-secondary-outline"
@@ -329,7 +395,7 @@ export default function App() {
                 onRemove={removeDevice}
               />
 
-              {user.role === 'ADMIN' && (
+              {currentUser.role === 'ADMIN' && (
                 <div style={{ marginTop: '24px' }}>
                   <DeviceForm agents={agents} onAdd={addDevice} />
                 </div>
